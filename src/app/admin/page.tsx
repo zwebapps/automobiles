@@ -25,6 +25,7 @@ import { Form } from "react-bootstrap";
 
 export default function Admin() {
   const [sidebarShow, setSidebarShow] = useState(true);
+  const [mainContainer, setMainContainer] = useState({});
   const [togglePage, setTogglePage] = useState({
     header: true,
     about: false,
@@ -54,6 +55,14 @@ export default function Admin() {
 
   const toggleSidebar = () => {
     setSidebarShow(!sidebarShow);
+    if(sidebarShow) {
+      setMainContainer({
+        zIndex: -1,
+        display: 'block',
+        position: 'relative'
+      });
+  
+    }
   }
   return (
     <CContainer fluid>     
@@ -67,15 +76,14 @@ export default function Admin() {
               aria-controls="navbarResponsive" 
               aria-expanded="false" 
               aria-label="Toggle navigation"
-              style={{ background: '#fefefe', zIndex: 1}}
               onClick={toggleSidebar}
             >
               <span className="navbar-toggler-icon"></span> 
-            </CButton>
+          </CButton>
       </CCol>
-      <CCol className="col-2 p-0 m-0" id="mainNav">
+      <CCol className="col-lg-2 col-md-12 col-sm-12 p-0 m-0 collapse navbar-collapse" style={{ background: '#ffffff', zIndex: 1, display: `${sidebarShow ? 'block' : 'none'}`, position: 'relative' }} id="mainNav">
         <CContainer style={{ background: '#ffffff'}}>     
-        <CSidebar className="border-end border-start dark collapse navbar-collapse"  style={{ background: '#ffffff', zIndex: 1, display: `${sidebarShow ? 'block' : 'none'}` }} colorScheme="dark" position="fixed">
+        <CSidebar className="border-end border-start dark"  colorScheme="dark">
         <CSidebarHeader className="border-bottom p-5 text-center">
           <CSidebarBrand>Majestic Journey</CSidebarBrand>
         </CSidebarHeader>
@@ -106,7 +114,7 @@ export default function Admin() {
         </CContainer>
       </CCol>
       
-      <CCol className="col-10 p-0 m-0" >
+      <CCol className="col-lg-10 col-md-12 col-sm-12 p-0 m-0" style={{ ...mainContainer }}>
         <CCol>
           <CRow>
             <CCol className="col-12 pt-5 m-0 text-center">
