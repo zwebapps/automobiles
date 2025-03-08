@@ -15,7 +15,6 @@ export default function DynamicForm({
   const [formValues, setFormValues] = useState({} as { [key: string]: string | File });
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('formValues',Object.values(formValues));
     if(Object.values(formValues).length === 0 || Object.values(formValues).some((val) => !val)) {
          toast.error('All fields are required'); 
          return;      

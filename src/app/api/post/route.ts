@@ -27,7 +27,3 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   return await postController.updatePost(req);
 }
-
-export async function DELETE(req: NextRequest) {
-  return await postController.deletePost(req);
-}

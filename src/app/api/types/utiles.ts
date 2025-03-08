@@ -1,5 +1,9 @@
+import { ReactNode } from "react";
+
 export type PostType = {
+    id: ReactNode;
       name: string;
-      data: string;
+      data: ReactNode;
+      image?: string;
     createdAt?: Date;
     }

@@ -72,7 +72,6 @@ export class PostController {
           );
         }
       }
-console.log('body',body);
       const postTobeSaved = {
         name: body.type,
         data: JSON.stringify({
@@ -111,12 +110,13 @@ console.log('body',body);
     return NextResponse.json(post, { status: 200 });
   };
 
-  deletePost = async (req: NextRequest) => {
+  deletePost = async (req: NextRequest, id: string ) => {   
     // Delete a Post
-    const id = req.nextUrl.searchParams.get("id") as string;
+    // const id = req.nextUrl.searchParams.get("id") as string;
+    console.log('deletePost',id);
     await this.postService.deletePost(id);
     return NextResponse.json({
-      message: "Post deleted successfully",
+      statusText: "Post deleted successfully",
       status: 200,
     });
   };
