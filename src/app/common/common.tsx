@@ -4,7 +4,7 @@ export interface Car {
     price: string;
     image: string;
     description: string;
-    colors: string[];
+    color: string;
 }
 
 export const Cars: Car[] = [
@@ -14,7 +14,7 @@ export const Cars: Car[] = [
       price: "$79,990",
       image: "/portfolio/p-3.jpeg",
       description: "A luxury electric sedan with long range and autopilot.",
-      colors: ["Red", "Black", "Orange", "Blue"],
+      color: '#c43e3e',
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ export const Cars: Car[] = [
       price: "$55,000",
       image: "/portfolio/p-3.jpeg",
       description: "A high-performance sports car with a classic design.",
-      colors: ["Yellow", "Black", "Gray"],
+      color: '#c43e3a',
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ export const Cars: Car[] = [
       price: "$72,800",
       image: "/portfolio/p-3.jpeg",
       description: "A stylish sports sedan with incredible power and handling.",
-      colors: ["Blue", "Orange", "Black"],
+      color: '#c43e3b',
     },
     {
         id: 4,
@@ -38,7 +38,7 @@ export const Cars: Car[] = [
         price: "$72,800",
         image: "/portfolio/p-3.jpeg",
         description: "A stylish sports sedan with incredible power and handling.",
-        colors: ["Blue", "Orange", "Black"],
+        color: '#c43e3b',
     },
     {
         id: 5,
@@ -46,7 +46,7 @@ export const Cars: Car[] = [
         price: "$72,800",
         image: "/portfolio/p-3.jpeg",
         description: "A stylish sports sedan with incredible power and handling.",
-        colors: ["Blue", "Orange", "Black"],
+        color: '#c43e3b',
     },
     {
         id: 6,
@@ -54,7 +54,7 @@ export const Cars: Car[] = [
         price: "$72,800",
         image: "/portfolio/p-3.jpeg",
         description: "A stylish sports sedan with incredible power and handling.",
-        colors: ["Blue", "Orange", "Black"],
+        color: '#c43e3b',
     },
     {
         id: 7,
@@ -62,7 +62,7 @@ export const Cars: Car[] = [
         price: "$72,800",
         image: "/portfolio/p-3.jpeg",
         description: "A stylish sports sedan with incredible power and handling.",
-        colors: ["Blue", "Orange", "Black"],
+        color: '#c43e3b',
     },
     {
         id: 8,
@@ -70,6 +70,15 @@ export const Cars: Car[] = [
         price: "$72,800",
         image: "/portfolio/p-3.jpeg",
         description: "A stylish sports sedan with incredible power and handling.",
-        colors: ["Blue", "Orange", "Black"],
+        color: '#c43e3b',
     }
   ];
+
+
+export interface FormField {
+    label: string;
+    name: string;
+    type: string;
+    id: string;
+    placeholder: string;
+}

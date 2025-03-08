@@ -1,0 +1,123 @@
+/**
+ * Creates a new post.
+ *
+ * @param {NextRequest} req
+ * @param {NextResponse} res
+ * @returns {Promise<void>}
+ */
+
+import PostService from "../services/PostService";
+import { NextRequest, NextResponse } from "next/server";
+import { PostType } from "../types/utiles";
+import path from "path";
+import fs from "fs";
+
+const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
+
+export const uploadFile = async (file: Blob) => {
+  if (file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR);
+    }
+
+    fs.writeFileSync(
+      path.resolve(UPLOAD_DIR, (file as File).name),
+      buffer
+    );
+    return {
+      success: true,
+      imageName: (file as File).name,
+    };
+  } else {
+    return {
+      imageName: (file as File).name,
+      success: false,
+    };
+  }
+};
+export class PostController {
+  private postService: PostService;
+
+  constructor() {
+    this.postService = new PostService();
+  }
+
+  getPosts = async () => {
+    // Retrieve a list of all Posts
+    const posts = await this.postService.getPosts();
+    return NextResponse.json(posts, { status: 200 });
+  };
+
+  createPost = async (req: NextRequest) => {
+    try {
+      const formData = await req.formData();
+      let name = null;
+      const body = Object.fromEntries(formData);
+      if(body.image) {
+        const file = (body.image as Blob) || null;
+        const { success, imageName } = await uploadFile(file);
+        name = imageName;
+        if (!success) {
+          return NextResponse.json(
+            { message: "Request body is empty or invalid." },
+            { status: 400 }
+          );
+        }
+  
+        if (!formData) {
+          return NextResponse.json(
+            { message: "Request body is empty or invalid." },
+            { status: 400 }
+          );
+        }
+      }
+console.log('body',body);
+      const postTobeSaved = {
+        name: body.type,
+        data: JSON.stringify({
+          ...body,
+          image: name,
+        }),
+      };
+
+      const post = await this.postService.createPost(
+        postTobeSaved as unknown as PostType
+      );
+      return NextResponse.json(post, {
+        status: 200,
+        statusText: "Post created successfully",
+      });
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
+  updatePost = async (req: NextRequest) => {
+    const id = req.nextUrl.searchParams.get("id") as string;
+    const postData = req.body;
+
+    if (!postData) {
+      return NextResponse.json(
+        { message: "Request body is empty or invalid." },
+        { status: 400 }
+      );
+    }
+
+    const post = await this.postService.updatePost(
+      id,
+      postData as unknown as PostType
+    );
+    return NextResponse.json(post, { status: 200 });
+  };
+
+  deletePost = async (req: NextRequest) => {
+    // Delete a Post
+    const id = req.nextUrl.searchParams.get("id") as string;
+    await this.postService.deletePost(id);
+    return NextResponse.json({
+      message: "Post deleted successfully",
+      status: 200,
+    });
+  };
+}

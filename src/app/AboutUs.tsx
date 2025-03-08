@@ -1,5 +1,7 @@
+
 export default function AboutUs() {
-    return (
+  
+    return (       
         <section className="about-us" id="about">
         <div className="container">
             <div className="text-center">
