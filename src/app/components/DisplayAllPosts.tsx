@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getImage } from "./commonUtils";
 
 type PostType = {
     _id: React.ReactNode | number;
@@ -34,15 +35,7 @@ export default function DisplayAllPosts() {
             const jsonData = await res.json(); 
             setPosts(jsonData);           
         });
-    }
-    const getImage = (data: string) => {
-        if(data) {
-            const postData = JSON.parse(data);
-            return  `/uploads/${postData.image}`;
-        } else {
-            return ""
-        }
-    }
+    }  
     const deletePost = async (id: string) => {
         await fetch(`/api/post/${id}`, {
             method: 'DELETE',
@@ -69,7 +62,7 @@ export default function DisplayAllPosts() {
               (posts as PostType[]).map((post: PostType, index: number) => { 
                  return (
                    <CTableRow key={index}>
-                     <CTableHeaderCell scope="row">{post._id}</CTableHeaderCell>
+                     <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                      <CTableDataCell>{post.name}</CTableDataCell>
                      <CTableDataCell>
                        <Image

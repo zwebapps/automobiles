@@ -1,5 +1,6 @@
 import Image from "next/image";
-export default function Portfolio() {
+export default function Portfolio({type = "portfolio"}: {type: string}) {
+    console.log(type)
     return (
         <div>
              <div className="container text-center" id="portfolio">

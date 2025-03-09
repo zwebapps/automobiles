@@ -40,6 +40,15 @@ class PostService {
   deletePost = async(id: string) => {
     await Post.deleteOne({ _id: id });
   }
+
+  getPostByName = async(name: string) => {
+    const post = await Post.find({ name });
+    return post;
+  }
+  getPostById = async(id: string) => {
+    const post = await Post.findOne({ _id: id });
+    return post;
+  }
 }
 
 export default PostService;

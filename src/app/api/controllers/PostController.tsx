@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PostType } from "../types/utiles";
 import path from "path";
 import fs from "fs";
+import { isObjectIdOrHexString } from "mongoose";
 
 const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
@@ -119,5 +120,15 @@ export class PostController {
       statusText: "Post deleted successfully",
       status: 200,
     });
+  };
+
+  getPostByNameOrId = async (req: NextRequest, param: string) => {
+    let post = null;
+    if(isObjectIdOrHexString(param)){
+      post = await this.postService.getPostById(param);
+      return NextResponse.json(post, { status: 200 });
+    }
+     post = await this.postService.getPostByName(param);
+    return NextResponse.json(post, { status: 200 });
   };
 }

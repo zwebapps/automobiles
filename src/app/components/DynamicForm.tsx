@@ -100,11 +100,15 @@ export default function DynamicForm({
           type === "contact" ? <Editor handleChange={(event: object) => handleEditorChange(event)}/>
           : null
           }
-        <CCol className="col-12 text-center">
-          <CButton type="submit" color="primary">
-            Submit
-          </CButton>
-        </CCol>
+          {
+          type !== "Posts" ? <CCol className="col-12 text-center">
+                                <CButton type="submit" color="primary">
+                                    Submit
+                                </CButton>
+                                </CCol>
+                                : null
+            }
+        
       </>
     </CForm>
   );

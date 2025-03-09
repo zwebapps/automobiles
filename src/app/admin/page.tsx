@@ -191,6 +191,7 @@ export default function Admin() {
         portfolio: false,
         contact: false,
         listing: false,
+         Posts: false,
         [param]: true,
       };
     });
@@ -377,10 +378,10 @@ export default function Admin() {
           </CRow>
           <hr />
 
-          {togglePage.header && <MainHeader></MainHeader>}
-          {togglePage.about && <AboutUs />}
-          {togglePage.services && <ServicesSection />}
-          {togglePage.portfolio && <Portfolio />}
+          {togglePage.header && <MainHeader type="header"></MainHeader>}
+          {togglePage.about && <AboutUs type="about" />}
+          {togglePage.services && <ServicesSection type="services" />}
+          {togglePage.portfolio && <Portfolio type="portfolio" />}
           <CRow className="justify-content-center mt-5">
             {togglePage.listing
               ? Cars.map((car: Car) => {
@@ -398,7 +399,7 @@ export default function Admin() {
                 })
               : null}
           </CRow>
-          {togglePage.contact && <ContactUs></ContactUs>}
+          {togglePage.contact && <ContactUs type="contact"></ContactUs>}
           {togglePage.Posts && <DisplayAllPosts/>}
           <CRow className="justify-content-center mt-5">
             <Footer></Footer>

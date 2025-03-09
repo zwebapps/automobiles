@@ -1,5 +1,17 @@
+import { useState, useEffect } from "react";
 
-export default function AboutUs() {
+export default function AboutUs({type = "about"}: {type: string}) {
+     const [about, setAbout] = useState<{[key: string]: string}>();
+        useEffect(() => {
+            fetch(`/api/post/${type}`, {
+                method: "GET",
+            }).then(async(res) => {              
+                const data = await res.json()as [{header: string, image: string, type: string, data: string}];
+                const post = data[0];
+                console.log('res', post)
+                setAbout(JSON.parse(post.data));
+            })
+        }, [type]);
   
     return (       
         <section className="about-us" id="about">
@@ -7,10 +19,11 @@ export default function AboutUs() {
             <div className="text-center">
                 <h2>About</h2>
                 <div className="line-shape"></div>
+                {about &&  
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat dolorum itaque quisquam assumenda maxime recusandae doloremque explicabo necessitatibus illum facere, numquam nemo iste at. Sint laborum vel soluta sequi id!
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat animi, aut eius labore eligendi delectus magni autem mollitia aliquam rem excepturi fuga laboriosam sapiente quas itaque ratione, dolorem iste ad?
-                </p>        
+                    {about.description}
+                </p> 
+                }                      
             </div>
         </div>
     </section>
