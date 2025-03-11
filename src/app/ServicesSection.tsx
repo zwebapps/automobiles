@@ -9,7 +9,6 @@ export default function ServicesSection({type = "services"}: {type: string}) {
                 }).then(async(res) => {
                     let post = await res.json();
                         post = post.map((p: {[key: string]: string}) => JSON.parse(p.data)) as [{[type: string]: string, image: string, type: string, data: string}]; 
-                        console.log('res', post)
                         setServices(post);
                 })
             }, [type]);
@@ -38,8 +37,8 @@ export default function ServicesSection({type = "services"}: {type: string}) {
                                     height={360}
                                     priority
                                     />
-                                <h3 className="mb-3">{service.services}</h3>
-                                <p className="text-muted mb-0">{service.description}</p>
+                                <h3 className="mb-3">{service.services && service.services.substring(0, 15)}</h3>
+                                <p className="text-muted mb-0">{service.description && service.description.substring(0, 100)}</p>
                                 </div>
                             </div>
                             )

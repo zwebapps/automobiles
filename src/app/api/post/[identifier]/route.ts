@@ -10,8 +10,7 @@ export async function DELETE(req: NextRequest) {
   }
 
   export async function GET(req: NextRequest) {
-    const { pathname } = req.nextUrl;
-    const postIdOrName = pathname.split('/').pop();
-    console.log('Rceached', postIdOrName, postIdOrName)  
+    const { pathname } = req.nextUrl;    
+    const postIdOrName = pathname.split('/').pop(); 
     return await postController.getPostByNameOrId(req, postIdOrName!);
   }

@@ -7,3 +7,15 @@ export type PostType = {
       image?: string;
     createdAt?: Date;
     }
+
+
+  export type UserType = {
+      id: ReactNode;
+      firstName: string;
+      lastName: string;
+      userName: string;
+      email: string;
+      password: string;
+      data: ReactNode;
+      createdAt?: Date;
+    };

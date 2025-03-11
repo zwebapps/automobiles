@@ -32,16 +32,20 @@ export default function DynamicForm({
     if(type === 'contact'){
       postData.append('editor',formValues['editor']);
     }
+    const token = localStorage.getItem("token");
     // create a new post
     await fetch("/api/post", {
       method: "POST",
       body: postData,
+      headers: {
+        Authorization: `Bearer ${token}`
+          }
         }).then((res) => {
-        if(res.status === 200){                
-            toast.success(res.statusText);
-        } else {
-            toast.error('Error creating post');
-        }
+          if(res.status === 200){                
+              toast.success(res.statusText);
+          } else {
+              toast.error('Error creating post');
+          }
     });
 
   };

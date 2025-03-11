@@ -20,7 +20,6 @@ export default function ContactUs({type = "contact"}: {type: string}) {
                     })
                 }, [type]);
 
-        console.log('contact', contact)
     return (
         <section className="contact-us" id="contact">
             <div className="row p-4">
@@ -64,7 +63,7 @@ export default function ContactUs({type = "contact"}: {type: string}) {
                 <div className="col-lg-6 col-md-6 col-sm-12">                        
                     <div className="container">
                         {contact && 
-                            <FroalaEditorView model={contact.editor} />
+                            <FroalaEditorView model={JSON.parse(contact.editor)} />
                         }
                     </div>
                 </div>

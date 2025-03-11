@@ -16,22 +16,24 @@ export default function MainHeader({type = "header"}: {type: string}) {
     }, [type]);
     
     return (
-        <header className="background-main">
-        <main className="main">
-        { headData && (
-            <h1 className="main-title">{headData.header}
-                <a href="" className="typewrite" data-period="3000" data-type='[ "Creative", "Future", "Enterteinment", "Freedom" ]'>
-                    <span className="wrap"></span>
-                </a>
-            </h1>
-        )}            
-        </main>
-        <div className="text-center">
-            <a className="main-link btn btn-lg"  href="">
-                See more
-                <i className="fa fa-chevron-down"></i>
-            </a> 
-        </div>
-    </header>
+        headData && (
+            <header className="background-main" style={{ backgroundImage: `url(/uploads/${headData ? headData.image : 'bg-1.jpeg'})`}}>
+            <main className="main">
+            { headData && (
+                <h1 className="main-title">{headData.header}
+                    <a href="" className="typewrite" data-period="3000" data-type='[ "Creative", "Future", "Enterteinment", "Freedom" ]'>
+                        <span className="wrap"></span>
+                    </a>
+                </h1>
+            )}            
+            </main>
+            <div className="text-center">
+                <a className="main-link btn btn-lg"  href="">
+                    See more
+                    <i className="fa fa-chevron-down"></i>
+                </a> 
+            </div>
+        </header>
+        )        
     )
 }

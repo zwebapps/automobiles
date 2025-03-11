@@ -1,13 +1,12 @@
-import { NextApiResponse } from 'next';
 import { PostController } from '../controllers/PostController';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const postController = new PostController();
 
-export default async function handler(req: NextRequest, res: NextApiResponse) {
-  console.log("================");
+export default async function handler(req: NextRequest) {
   switch (req.method) {
     case 'GET':
+      console.log('>>>>authenticate token')
       return await postController.getPosts();
     case 'POST':
       return await postController.createPost(req);
@@ -17,6 +16,6 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
       const id = req.nextUrl.searchParams.get("id") as string;
       return await postController.deletePost(req, id);
     default:
-      return res.status(405).json({ message: 'Method not allowed' });
-  }
+      return NextResponse.json({ status: 403, message: 'Method not allowed' });
+    }
 }

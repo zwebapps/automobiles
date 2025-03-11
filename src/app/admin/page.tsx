@@ -18,6 +18,7 @@ import {
   cilCloudDownload,
   cilLayers,
   cilHamburgerMenu,
+  cilAccountLogout,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import MainHeader from "../MainHeader";
@@ -30,6 +31,8 @@ import DynamicForm from "../components/DynamicForm";
 import AdminHeader from "../components/AdminHeader";
 import ContactUs from "../components/ContactUs";
 import DisplayAllPosts from "../components/DisplayAllPosts";
+import { useRouter } from "next/navigation";
+
 
 type FormField = {
   label: string;
@@ -163,6 +166,7 @@ type FormType =
   | "listing" | "Posts";
 
 export default function Admin() {
+  const router = useRouter();
   const [formType, setFormType] = useState<FormType>("header");
   const [fields, setFields] = useState<FormField[]>([]);
   const [sidebarShow, setSidebarShow] = useState(true);
@@ -178,8 +182,18 @@ export default function Admin() {
   });
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+      }  
+    }   
     setFields(formFields[formType]);
   }, [formType]);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
+  }
   const handleTogglePage = (param: FormType) => {
     setFormType(param);
     setTogglePage((prevState) => {
@@ -251,7 +265,7 @@ export default function Admin() {
               colorScheme="dark"
             >
               <CSidebarHeader className="border-bottom p-5 text-center">
-                <CSidebarBrand>Majestic Journey</CSidebarBrand>
+                <CSidebarBrand>Majestic Journey</CSidebarBrand>                         
               </CSidebarHeader>
               <CSidebarNav className="text-center border-bottom">
                 <CNavItem
@@ -358,6 +372,19 @@ export default function Admin() {
                     width={24}
                   />{" "}
                   All Posts
+                </CNavItem>
+                <CNavItem
+                  href="#"
+                  className="list-unstyled p-3"
+                  onClick={() => handleLogout()}
+                >
+                  <CIcon
+                    customClassName="nav-icon pr-1 list-unstyled"
+                    icon={cilAccountLogout}
+                    height={24}
+                    width={24}
+                  />{" "}
+                  Logout
                 </CNavItem>
               </CSidebarNav>
             </CSidebar>

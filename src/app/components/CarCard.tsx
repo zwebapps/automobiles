@@ -19,8 +19,8 @@ const CarCard = ({ id, name, price, image, description, color } : { id: number, 
             />
         <CCardBody>
             <CCardTitle>{name}</CCardTitle>
-            <CCardText>{description} </CCardText>
-            <h5 className="text-primary mb-3">Price: {price}</h5>
+            <CCardText>{description && description.substring(0,150)} </CCardText>
+            <h5 className="text-primary mb-3">Price: {price} €</h5>
             <div className="d-flex align-items-center">
             <span className="me-2">Available Color:</span>
             <div

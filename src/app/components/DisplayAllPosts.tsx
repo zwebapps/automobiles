@@ -30,6 +30,10 @@ export default function DisplayAllPosts() {
     const getPosts = async () => {
         await fetch("/api/post", {
             method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+             authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
             }).then(async (res) => {
             setLoading(false);
             const jsonData = await res.json(); 
@@ -39,8 +43,14 @@ export default function DisplayAllPosts() {
     const deletePost = async (id: string) => {
         await fetch(`/api/post/${id}`, {
             method: 'DELETE',
+            headers: {
+              "Content-Type": "application/json",
+               authorization: `Bearer ${localStorage.getItem("token")}`,
+              }
             }).then(async (res) => {
-            toast.success(res.statusText);
+            if(res.status === 200) {
+              toast.success('Post deleted successfully');
+            }
             getPosts();                   
         });
     }
