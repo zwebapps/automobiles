@@ -16,6 +16,7 @@
     "autoprefixer": "^10.4.20",
     "bootstrap": "^5.3.3",
     "busboy": "^1.6.0",
+    "dotenv": "^16.4.7",
     "formidable": "^3.5.2",
     "froala-editor": "^4.5.0",
     "jsonwebtoken": "^9.0.2",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/busboy": "^1.5.4",
+    "@types/dotenv": "^6.1.1",
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
