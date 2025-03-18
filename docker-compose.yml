@@ -50,33 +50,24 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
-    env_file:
-      - .env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
     ports:
-      - "27018:27017"
+      - "27017:27017"
     networks:
       - mongo_network
     volumes:
       - mongodb_data:/data/db
 
   nextjs:
-    build:
-      context: .
-      args:
-        MONGO_URI_ARG: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
-        NEXT_PUBLIC_API_URL_ARG: ${NEXT_PUBLIC_API_URL}
-        JWT_SECRETE_STRING_ARG: ${JWT_SECRETE_STRING}
+    build: .
     ports:
-      - "3000:3000"  # Ensure this port is exposed to the outside world
+      - "3000:3000"
     depends_on:
       - mongodb
-    env_file:
-      - .env
     environment:
-      - MONGO_URI=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
+      - MONGO_URI=mongodb://mongodb:27017
     volumes:
       - ./public/uploads:/app/public/uploads:rw
     networks:
