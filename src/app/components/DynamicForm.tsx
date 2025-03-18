@@ -19,7 +19,7 @@ export default function DynamicForm({
          toast.error('All fields are required'); 
          return;      
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
     const postData = new FormData();
     postData.append('type',type);
     formFields.forEach((field) => {

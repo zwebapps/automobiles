@@ -3,15 +3,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const postController = new PostController();
 
-export async function GET(req: NextRequest, res: NextResponse) {
-  console.log(req.body, res.body);
-  return await postController.getPosts();
+export async function GET(req: NextRequest) {
+  console.log(req.body);
+  const post = await postController.getPosts();
+  return NextResponse.json(post, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
-  return await postController.createPost(req);
+  await postController.createPost(req);
+  return NextResponse.json({message: 'Post created successfully!'}, { status: 200 });
 }
 
 export async function PUT(req: NextRequest) {  
-  return await postController.updatePost(req);
+  await postController.updatePost(req);
+  return NextResponse.json({message: 'Post update successfully!'}, { status: 200 });
 }

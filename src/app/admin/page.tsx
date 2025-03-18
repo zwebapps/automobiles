@@ -189,7 +189,7 @@ export default function Admin() {
       }  
     }   
     setFields(formFields[formType]);
-  }, [formType]);
+  }, [formType, router]);
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");
