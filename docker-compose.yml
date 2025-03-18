@@ -9,11 +9,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - MONGODB_URI=${MONGODB_URI}
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - MONGO_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
-      - MONGO_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
     ports:
       - "27018:27017"
     networks:
@@ -22,7 +17,12 @@ services:
       - mongodb_data:/data/db
 
   nextjs:
-    build: .
+    build:
+      context: .
+      args:
+        MONGO_URI_ARG: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
+        NEXT_PUBLIC_API_URL_ARG: ${NEXT_PUBLIC_API_URL}
+        JWT_SECRETE_STRING_ARG: ${JWT_SECRETE_STRING}
     ports:
       - "3000:3000"
     depends_on:
@@ -43,4 +43,3 @@ networks:
 volumes:
   mongodb_data:
     driver: local
-  #docker-compose up  to run the application
