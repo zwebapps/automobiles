@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGO_URI;
+const MONGODB_URI = process.env.MONGO_URI || 'mongodb://admin:automobile@localhost:27018/automobile?authSource=admin';
 console.log("==============")
 console.log(MONGODB_URI)
 console.log("==============")
