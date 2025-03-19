@@ -23,7 +23,7 @@ export function middleware(req: NextRequest) {
     const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader;
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET as string);      
+      jwt.verify(token, process.env.JWT_SECRETE_STRING as string);      
       return NextResponse.next(); 
     } catch (error) {
       console.error("JWT Verification Failed:", error);

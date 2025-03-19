@@ -12,6 +12,8 @@ import { UserType } from "../types/utiles";
 import jwt from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
@@ -100,6 +102,13 @@ export class UserController {
     }
   
     const user = await this.userService.authUser(userName, password);
+
+    console.log('-----------------------------------');
+    console.log('user detials', user);
+    console.log('env', process.env);
+
+    console.log('JWT_SECRETE_STRING', process.env.JWT_SECRETE_STRING);
+    console.log('-----------------------------------');
     // Generate JWT token
     const token = jwt.sign({ userName: user?.userName, email: user?.email }, process.env.JWT_SECRETE_STRING as string, {
       expiresIn: "1h",

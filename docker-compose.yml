@@ -50,11 +50,14 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    env_file:
+      - .env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=automobile
+      - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
     ports:
-      - "27017:27017"
+      - "27018:27017"
     networks:
       - mongo_network
     volumes:
@@ -66,8 +69,11 @@ services:
       - "3000:3000"
     depends_on:
       - mongodb
+    env_file:
+      - .env
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_URI=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017
+      - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
     volumes:
       - ./public/uploads:/app/public/uploads:rw
     networks:

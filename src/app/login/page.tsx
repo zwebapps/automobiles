@@ -57,16 +57,13 @@ export default function LoginAdmin() {
       method: "POST",
       body: JSON.stringify(formData),
     }).then(async (res) => {
-        const data = await res.json();
-        console.log('loginUser', data);
-        if(!data){
-            toast.error('Provide correct credentials');
-        }
+        const data = await res.json();      
         if(res.status === 200){
-            toast.success('User logged in successfully');
+          localStorage.setItem('token', data);
+          router.push('/admin');
+          return toast.success('User logged in successfully');
         }
-        localStorage.setItem('token', data);
-        router.push('/admin');
+        toast.error('Provide correct credentials');
     });
   };
 

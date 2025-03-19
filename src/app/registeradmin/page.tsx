@@ -32,6 +32,11 @@ export default function RegisterAdmin() {
       body: JSON.stringify(formData),
     }).then(async (res) => {
       console.log("res", res);
+      if (res.status === 200) {
+        toast.success("User created successfully");
+      }else{
+        toast.error("User creation failed");
+      }
     });
   };
 
