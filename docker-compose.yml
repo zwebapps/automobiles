@@ -1,49 +1,3 @@
-# version: '3'
-
-# services:
-#   mongodb:
-#     image: mongo:latest
-#     container_name: mongodb
-#     env_file:
-#       - .env
-#     environment:
-#       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
-#       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-#     ports:
-#       - "27018:27017"
-#     networks:
-#       - mongo_network
-#     volumes:
-#       - mongodb_data:/data/db
-
-#   nextjs:
-#     build:
-#       context: .
-#       args:
-#         MONGO_URI_ARG: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
-#         NEXT_PUBLIC_API_URL_ARG: ${NEXT_PUBLIC_API_URL}
-#         JWT_SECRETE_STRING_ARG: ${JWT_SECRETE_STRING}
-#     ports:
-#       - "3000:3000"
-#     depends_on:
-#       - mongodb
-#     env_file:
-#       - .env
-#     environment:
-#       - MONGO_URI=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
-#     volumes:
-#       - ./public/uploads:/app/public/uploads:rw
-#     networks:
-#       - mongo_network
-
-# networks:
-#   mongo_network:
-#     driver: bridge
-
-# volumes:
-#   mongodb_data:
-#     driver: local
-
 version: '3'
 
 services:
@@ -53,9 +7,8 @@ services:
     env_file:
       - .env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=automobile
-      - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
     ports:
       - "27018:27017"
     networks:
@@ -64,7 +17,12 @@ services:
       - mongodb_data:/data/db
 
   nextjs:
-    build: .
+    build:
+      context: .
+      args:
+        MONGO_URI_ARG: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
+        NEXT_PUBLIC_API_URL_ARG: ${NEXT_PUBLIC_API_URL}
+        JWT_SECRETE_STRING_ARG: ${JWT_SECRETE_STRING}
     ports:
       - "3000:3000"
     depends_on:
@@ -72,8 +30,7 @@ services:
     env_file:
       - .env
     environment:
-      - MONGO_URI=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017
-      - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
+      - MONGO_URI=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
     volumes:
       - ./public/uploads:/app/public/uploads:rw
     networks:
@@ -86,3 +43,24 @@ networks:
 volumes:
   mongodb_data:
     driver: local
+
+# version: '3'
+
+# services:
+#   mongodb:
+#     image: mongo:latest
+#     container_name: mongodb
+#     env_file:
+#       - .env
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=admin
+#       - MONGO_INITDB_ROOT_PASSWORD=automobile
+#       - JWT_SECRETE_STRING=${JWT_SECRETE_STRING}
+#     ports:
+#       - "27018:27017"
+#     networks:
+#       - mongo_network
+#     volumes:
+#       - mongodb_data:/data/db
+
+
