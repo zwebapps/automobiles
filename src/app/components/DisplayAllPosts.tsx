@@ -64,7 +64,7 @@ export default function DisplayAllPosts() {
               <CTableHeaderCell scope="col">#</CTableHeaderCell>
               <CTableHeaderCell scope="col">Name</CTableHeaderCell>
               <CTableHeaderCell scope="col">Image</CTableHeaderCell>
-              <CTableHeaderCell scope="col">Data</CTableHeaderCell>
+              {/* <CTableHeaderCell scope="col">Data</CTableHeaderCell> */}
               <CTableHeaderCell scope="col">Action</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
@@ -80,13 +80,13 @@ export default function DisplayAllPosts() {
                            className="img-fluid"
                            src={getImage(post.data as string)}
                            alt="logo"
-                           width={460}
+                           width={360}
                            height={360}
                            priority
                            />
                        
                        </CTableDataCell>
-                     <CTableDataCell>{post.data}</CTableDataCell>
+                     {/* <CTableDataCell>{post.data}</CTableDataCell> */}
                      <CTableDataCell onClick={() => {deletePost(post._id as string)}}>
                        <CIcon
                          customClassName="nav-icon pr-1"
