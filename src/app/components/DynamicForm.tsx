@@ -1,4 +1,4 @@
-import { CButton, CCol, CForm, CFormInput, CFormTextarea } from "@coreui/react";
+import { CButton, CCol, CForm, CFormInput, CFormTextarea, CSpinner } from "@coreui/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { FormField } from "../common/common";
 import { toast } from "react-toastify";
@@ -13,7 +13,9 @@ export default function DynamicForm({
 }) {
  
   const [formValues, setFormValues] = useState({} as { [key: string]: string | File });
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     if(Object.values(formValues).length === 0 || Object.values(formValues).some((val) => !val)) {
          toast.error('All fields are required'); 
@@ -42,6 +44,9 @@ export default function DynamicForm({
           }
         }).then((res) => {
           console.log('dynamic form res', res)
+          setFormValues({});
+          setLoading(false);
+
           if(res.status === 200){                
               toast.success(`${type} created successfully`);
           } else {
@@ -107,8 +112,9 @@ export default function DynamicForm({
           }
           {
           type !== "Posts" ? <CCol className="col-12 text-center">
-                                <CButton type="submit" color="primary">
-                                    Submit
+                                <CButton type="submit" color="primary" disabled={loading}>
+                                  {loading ?  <CSpinner size="sm" variant="grow" /> : "Submit"}
+                                 
                                 </CButton>
                                 </CCol>
                                 : null
