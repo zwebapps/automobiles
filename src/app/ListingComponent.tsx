@@ -30,7 +30,7 @@ export default function ListingComponent({ type = "listing"}: { type: string; })
       const listingPost = post.map((p: DBCar) => JSON.parse(p.data)) as Car[];      
       setListing(listingPost);
     });
-  }, [type, listing]);
+  }, [type]);
   console.log("listing", listing);
   return (
     <CRow>
