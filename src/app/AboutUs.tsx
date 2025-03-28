@@ -8,7 +8,7 @@ export default function AboutUs({type = "about"}: {type: string}) {
             }).then(async(res) => {              
                 const data = await res.json()as [{header: string, image: string, type: string, data: string}];
                 const post = data[0];
-                console.log('res', post)
+                console.log('About us res', data)
                 setAbout(JSON.parse(post.data));
             })
         }, [type]);

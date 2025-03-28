@@ -32,7 +32,7 @@ export default function ContactUs({type = "contact"}: {type: string}) {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-12">                        
+                {/* <div className="col-lg-6 col-md-6 col-sm-12">                        
                     <div className="container">
                         <form>
                             <div className="row">
@@ -59,8 +59,8 @@ export default function ContactUs({type = "contact"}: {type: string}) {
                             </div>
                         </form>
                     </div>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-12">                        
+                </div> */}
+                <div className="col-lg-12 col-md-6 col-sm-12">                        
                     <div className="container">
                         {contact && 
                             <FroalaEditorView model={JSON.parse(contact.editor)} />

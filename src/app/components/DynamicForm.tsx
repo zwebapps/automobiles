@@ -41,8 +41,9 @@ export default function DynamicForm({
         Authorization: `Bearer ${token}`
           }
         }).then((res) => {
+          console.log('dynamic form res', res)
           if(res.status === 200){                
-              toast.success(res.statusText);
+              toast.success(`${type} created successfully`);
           } else {
               toast.error('Error creating post');
           }
