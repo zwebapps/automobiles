@@ -21,19 +21,21 @@ export const uploadFile = async (file: Blob) => {
     if (!fs.existsSync(UPLOAD_DIR)) {
       fs.mkdirSync(UPLOAD_DIR);
     }
-
     fs.writeFileSync(
       path.resolve(UPLOAD_DIR, (file as File).name),
       buffer
     );
+    console.log("uploaded file", file, "iamge exist", (file as File).type)
     return {
       success: true,
       imageName: (file as File).name,
+      type: (file as File).type
     };
   } else {
     return {
       imageName: (file as File).name,
       success: false,
+      type: (file as File).type
     };
   }
 };
@@ -54,11 +56,13 @@ export class PostController {
     try {
       const formData = await req.formData();
       let name = null;
+      let imageType = null;
       const body = Object.fromEntries(formData);
       if(body.image) {
         const file = (body.image as Blob) || null;
-        const { success, imageName } = await uploadFile(file);
+        const { success, imageName, type } = await uploadFile(file);
         name = imageName;
+        imageType = type;
         if (!success) {
           return NextResponse.json(
             { message: "Request body is empty or invalid." },
@@ -75,6 +79,7 @@ export class PostController {
       }
       const postTobeSaved = {
         name: body.type,
+        imageType: imageType,
         data: JSON.stringify({
           ...body,
           image: name,
