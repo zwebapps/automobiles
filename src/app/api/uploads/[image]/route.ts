@@ -7,11 +7,14 @@ import path from 'path';
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams.get("image") as string;
   const filePath = path.join(__dirname, 'uploads', params);
+
+  const fileExtension = path.extname(filePath).toLowerCase();
   const fileBuffer = await readFile(filePath);
+  console.log("fileExtension", fileExtension)
   return new NextResponse(fileBuffer, {
     status: 200,
     headers: {
-      'Content-Type': 'image/jpeg',
+      'Content-Type': `image/${fileExtension}`,
     },
   });
 }

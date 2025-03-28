@@ -1,5 +1,6 @@
+'use client';
 import { CButton, CCol, CForm, CFormInput, CFormTextarea, CSpinner } from "@coreui/react";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FormField } from "../common/common";
 import { toast } from "react-toastify";
 import Editor from "./Editor";
@@ -14,11 +15,15 @@ export default function DynamicForm({
  
   const [formValues, setFormValues] = useState({} as { [key: string]: string | File });
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+  console.log('formValues', formValues)
+  }, [formValues]);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
     if(Object.values(formValues).length === 0 || Object.values(formValues).some((val) => !val)) {
          toast.error('All fields are required'); 
+         setLoading(false);
          return;      
     }
   
@@ -46,9 +51,13 @@ export default function DynamicForm({
           console.log('dynamic form res', res)
           setFormValues({});
           setLoading(false);
-
           if(res.status === 200){                
               toast.success(`${type} created successfully`);
+              if(window) {               
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+              }
           } else {
               toast.error('Error creating post');
           }
