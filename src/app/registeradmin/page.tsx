@@ -31,7 +31,7 @@ export default function RegisterAdmin() {
       method: "POST",
       body: JSON.stringify(formData),
     }).then(async (res) => {
-      console.log("res", res);
+      console.log("create user res", res);
       if (res.status === 200) {
         toast.success("User created successfully");
       }else{

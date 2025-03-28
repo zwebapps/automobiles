@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import CarCard from "./components/CarCard";
 import { getImageUrl } from "./components/commonUtils";
@@ -24,12 +25,12 @@ export default function ListingComponent({ type = "listing"}: { type: string; })
     fetch(`/api/post/${type}`, {
       method: "GET",
     }).then(async (res) => {
-      let post = await res.json();
-      post = post.map((p: DBCar) => JSON.parse(p.data)) as Car[];
-      console.log("listing", post);
-      setListing(post);
+      const post = await res.json();
+      console.log("listing Component", post);
+      const listingPost = post.map((p: DBCar) => JSON.parse(p.data)) as Car[];      
+      setListing(listingPost);
     });
-  }, [type]);
+  }, [type, listing]);
   console.log("listing", listing);
   return (
     <CRow>

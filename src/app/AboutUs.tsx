@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 
 export default function AboutUs({type = "about"}: {type: string}) {
@@ -9,7 +10,7 @@ export default function AboutUs({type = "about"}: {type: string}) {
                 const data = await res.json()as [{header: string, image: string, type: string, data: string}];
                 const post = data[0];
                 console.log('About us res', data)
-                setAbout(JSON.parse(post.data));
+                setAbout(post);
             })
         }, [type]);
   

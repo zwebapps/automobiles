@@ -47,7 +47,7 @@ export class PostController {
   getPosts = async () => {
     // Retrieve a list of all Posts
     const posts = await this.postService.getPosts();
-    return NextResponse.json(posts, { status: 200 });
+   return posts;
   };
 
   createPost = async (req: NextRequest) => {
@@ -126,9 +126,9 @@ export class PostController {
     let post = null;
     if(isObjectIdOrHexString(param)){
       post = await this.postService.getPostById(param);
-      return NextResponse.json(post, { status: 200 });
+      return post;
     }
      post = await this.postService.getPostByName(param);
-    return NextResponse.json(post, { status: 200 });
+    return post;
   };
 }

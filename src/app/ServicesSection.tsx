@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getImageUrl } from "./components/commonUtils";
@@ -7,7 +8,9 @@ export default function ServicesSection({type = "services"}: {type: string}) {
                 fetch(`/api/post/${type}`, {
                     method: "GET",
                 }).then(async(res) => {
+                    console.log('Services res', res)
                     let post = await res.json();
+                    console.log('Services res after json', res)
                         post = post.map((p: {[key: string]: string}) => JSON.parse(p.data)) as [{[type: string]: string, image: string, type: string, data: string}]; 
                         setServices(post);
                 })

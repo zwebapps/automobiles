@@ -8,9 +8,9 @@ export default function MainHeader({type = "header"}: {type: string}) {
         fetch(`/api/post/${type}`, {
             method: "GET",
         }).then(async(res) => {
+            console.log('Main Header res', res)
             const data = await res.json()as [{header: string, image: string, type: string, data: string}];
-            const post = data[0];
-            console.log('res', post)
+            const post = data[0];           
             setHeadData(JSON.parse(post.data));
         })
     }, [type]);
