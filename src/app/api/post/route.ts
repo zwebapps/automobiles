@@ -5,7 +5,7 @@ const postController = new PostController();
 
 export async function GET(req: NextRequest) { 
   const post = await postController.getPosts();
-  console.log('Post requturned', post, req.body);
+  console.log('Post requturned', req.body);
   return NextResponse.json(post, { status: 200 });
 }
 

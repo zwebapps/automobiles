@@ -53,11 +53,11 @@ export default function DynamicForm({
           setLoading(false);
           if(res.status === 200){                
               toast.success(`${type} created successfully`);
-              if(window) {               
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
-              }
+              // if(window) {               
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 1000);
+              // }
           } else {
               toast.error('Error creating post');
           }
