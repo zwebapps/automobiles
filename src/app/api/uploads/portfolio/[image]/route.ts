@@ -10,6 +10,7 @@ const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
 
 export async function GET(req: NextRequest) {
+  console.log("request reaching for images")
   const url = new URL(req.url);
   const imagePath = url.pathname.split('/').pop();
   
@@ -19,6 +20,7 @@ export async function GET(req: NextRequest) {
   const fileExtension = path.extname(filePath).toLowerCase();
   const fileBuffer = await readFile(filePath);
 
+  console.log("fileExtension", fileExtension, "fileBuffer", fileBuffer)
   const mimeType =
   fileExtension === '.jpg' || fileExtension === '.jpeg'
     ? 'image/jpeg'

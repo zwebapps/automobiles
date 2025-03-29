@@ -82,6 +82,7 @@ export default function DisplayAllPosts() {
                            alt="logo"
                            width={360}
                            height={360}
+                           loader={() => '/api/uploads'+ getImage(post.data as string)}
                            priority
                            />
                        

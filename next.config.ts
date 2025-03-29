@@ -10,14 +10,11 @@ const nextConfig: NextConfig = {
         MONGO_ROOT_PASSWORD: process.env.MONGO_ROOT_PASSWORD,
         JWT_SECRETE_STRING: process.env.JWT_SECRETE_STRING || 'M7IVjrBGWWxST6YSO0GWYI98qvfd0r5bhr9dNPwlw2Q='
       },
-      rewrites: async () => {
-        return [
-          {
-            source: '/_next/image',
-            destination: '/api/uploads',
-          },
-        ];
-      },
+   images: {
+     disableStaticImages: true,
+     path: '/uploads',
+     loader: 'custom',
+   }
 };
 
 export default nextConfig;
