@@ -1,3 +1,4 @@
+'use client'
 import { CCol, CContainer, CHeader } from "@coreui/react"
 
 export default function AdminHeader({ type }: {type: string}) {

@@ -1,3 +1,4 @@
+'use client'
 export default function Nav() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">

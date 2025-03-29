@@ -11,14 +11,14 @@ export async function GET(req: NextRequest) {
 
   const fileExtension = path.extname(filePath).toLowerCase();
   const fileBuffer = await readFile(filePath);
-  
+
   console.log("fileExtension", fileExtension, "fileBuffer", fileBuffer)
   const mimeType =
   fileExtension === '.jpg' || fileExtension === '.jpeg'
     ? 'image/jpeg'
     : fileExtension === '.png'
     ? 'image/png'
-    : null;
+    : 'image/jpeg';
   if (!mimeType) return new NextResponse('Invalid image format', { status: 400 });
   
   return new NextResponse(fileBuffer, {
