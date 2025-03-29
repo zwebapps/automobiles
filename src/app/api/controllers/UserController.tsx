@@ -15,7 +15,7 @@ import fs from "fs";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
+const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public");
 
 export const uploadFile = async (file: Blob) => {
   if (file) {

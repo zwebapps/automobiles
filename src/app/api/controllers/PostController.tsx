@@ -13,7 +13,7 @@ import path from "path";
 import fs from "fs";
 import { isObjectIdOrHexString } from "mongoose";
 
-const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
+const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public");
 
 export const uploadFile = async (file: Blob) => {
   if (file) {
