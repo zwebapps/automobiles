@@ -15,27 +15,34 @@ import { isObjectIdOrHexString } from "mongoose";
 
 const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
-export const uploadFile = async (file: Blob) => {
-  if (file) {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    if (!fs.existsSync(UPLOAD_DIR)) {
-      fs.mkdirSync(UPLOAD_DIR);
+export const uploadFile = async (file: File) => {
+  try {
+    if (file) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      if (!fs.existsSync(UPLOAD_DIR)) {
+        fs.mkdirSync(UPLOAD_DIR);
+      }
+      fs.writeFileSync(
+        path.resolve(UPLOAD_DIR, file.name),
+        buffer
+      );
+      console.log("uploaded file", file, "image type", file.type)
+      return {
+        success: true,
+        imageName: file.name,
+        type: file.type
+      };
+    } else {
+      return {
+        success: false,
+        errorMessage: "No file provided"
+      };
     }
-    fs.writeFileSync(
-      path.resolve(UPLOAD_DIR, (file as File).name),
-      buffer
-    );
-    console.log("uploaded file", file, "image type", (file as File).type)
+  } catch (error) {
+    console.log(error)
     return {
-      success: true,
-      imageName: (file as File).name,
-      type: (file as File).type
-    };
-  } else {
-    return {
-      imageName: (file as File).name,
       success: false,
-      type: (file as File).type
+      errorMessage: "Error uploading file"
     };
   }
 };
@@ -59,7 +66,7 @@ export class PostController {
       let imageType = null;
       const body = Object.fromEntries(formData);
       if(body.image) {
-        const file = (body.image as Blob) || null;
+        const file = (body.image as File) || null;
         const { success, imageName, type } = await uploadFile(file);
         name = imageName;
         imageType = type;

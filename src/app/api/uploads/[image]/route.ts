@@ -5,6 +5,7 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 
 export async function GET(req: NextRequest) {
+  console.log("request reaching for images")
   const params = req.nextUrl.searchParams.get("image") as string;
   console.log("params to get image", params)
   const filePath = path.join(__dirname, 'uploads', params);
