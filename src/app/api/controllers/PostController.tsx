@@ -25,7 +25,7 @@ export const uploadFile = async (file: Blob) => {
       path.resolve(UPLOAD_DIR, (file as File).name),
       buffer
     );
-    console.log("uploaded file", file, "iamge exist", (file as File).type)
+    console.log("uploaded file", file, "image type", (file as File).type)
     return {
       success: true,
       imageName: (file as File).name,
