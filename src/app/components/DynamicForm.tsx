@@ -3,7 +3,8 @@ import { CButton, CCol, CForm, CFormInput, CFormTextarea, CSpinner } from "@core
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FormField } from "../common/common";
 import { toast } from "react-toastify";
-import Editor from "./Editor";
+import EditorComponent from "../components/EditorComponent";
+
 
 export default function DynamicForm({
   type,
@@ -15,9 +16,9 @@ export default function DynamicForm({
  
   const [formValues, setFormValues] = useState({} as { [key: string]: string | File });
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-  console.log('formValues', formValues)
-  }, [formValues]);
+  }, [loading]);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -53,11 +54,11 @@ export default function DynamicForm({
           setLoading(false);
           if(res.status === 200){                
               toast.success(`${type} created successfully`);
-              // if(window) {               
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 1000);
-              // }
+              if(window) {               
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+              }
           } else {
               toast.error('Error creating post');
           }
@@ -67,6 +68,7 @@ export default function DynamicForm({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    debugger
     let name = null
     let value = null;
     if (e.target instanceof HTMLInputElement && e.target.files) {
@@ -79,13 +81,13 @@ export default function DynamicForm({
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleEditorChange = (data: object) => {    
+  const handleEditorChange = (data: unknown) => {    
     setFormValues({ ...formValues, editor: JSON.stringify(data) });
   }
   return (
     <CForm onSubmit={handleSubmit} key={`${type}-form`}>
       <>
-        {formFields && formFields.length > 0 &&
+        { formFields && formFields.length > 0 &&
           formFields.map((field, index) => (
             <div className="mb-3" key={`${index}-${field.type}`}>
               {field.type === "textarea" ? (
@@ -100,23 +102,37 @@ export default function DynamicForm({
                   onChange={(e) => handleChange(e)}
                   aria-describedby={`${field.id}-help`}
                 ></CFormTextarea>
-              ) : (
-                <CFormInput
-                  key={`${index}-${field.type}`}
-                  type={field.type}
-                  name={field.name}
-                  id={field.id}
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  onChange={(e) => handleChange(e)}
-                  text="Must be 8-20 characters long."
-                  aria-describedby={`${field.id}-help`}
-                />
-              )}
+              ) : ( field.type === "color" ? (
+                      <CFormInput
+                      key={`${index}-${field.type}`}
+                      type={field.type}
+                      name={field.name}
+                      id={field.id}
+                      label={field.label}
+                      placeholder={field.placeholder}
+                      onChange={(e) => handleChange(e)}
+                      text="Must be 8-20 characters long."
+                      aria-describedby={`${field.id}-help`}
+                      value={field.defaultValue}
+                    />
+                  ) : (
+                  <CFormInput
+                    key={`${index}-${field.type}`}
+                    type={field.type}
+                    name={field.name}
+                    id={field.id}
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    onChange={(e) => handleChange(e)}
+                    text="Must be 8-20 characters long."
+                    aria-describedby={`${field.id}-help`}
+                  />
+                ))
+              }
             </div>
           ))}
           { 
-          type === "contact" ? <Editor handleChange={(event: object) => handleEditorChange(event)}/>
+          type === "contact" ? <EditorComponent handleChange={(event: unknown ) => handleEditorChange(event)}/>
           : null
           }
           {

@@ -7,7 +7,6 @@ import ServicesSection from "./ServicesSection";
 import { CRow } from "@coreui/react";
 import ContactUs from "./components/ContactUs";
 import ListingComponent from "./ListingComponent";
-// import Portfolio from "./components/Portfolio";
 
 
 export default function Home() {
@@ -15,14 +14,13 @@ export default function Home() {
     <div>
     <Nav />
     <MainHeader type="header" />
-    <AboutUs type="about" />
-    <br />
-    <ServicesSection type="services" />
-    <br /> 
+    <AboutUs type="about" />   
     <CRow>
     <ListingComponent type="listing" />
     </CRow>    
-   {/* <Portfolio type="portfolio" /> */}
+    <br />
+    <ServicesSection type="services" />
+    <br /> 
     <ContactUs type="contact" />
     <br />
     <Footer></Footer>

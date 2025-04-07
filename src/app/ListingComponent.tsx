@@ -33,20 +33,30 @@ export default function ListingComponent({ type = "listing"}: { type: string; })
   }, [type]);
   console.log("listing", listing);
   return (
-    <CRow>
-      {listing && listing.map((car: Car, index: number) => {        
-        return (
-          <CarCard
-            key={index}
-            id={index}
-            name={car.vehicleName}
-            price={car.price}
-            image={getImageUrl(car.image)}
-            description={car.description}
-            color={car.vehicleColor}
-          />
-        )
-      })} 
-    </CRow>
+    <section id="cars">
+      <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <h2 className="section-heading">Available Cars</h2>
+                            <div className="line-shape"></div>
+                        </div>
+                    </div>
+                </div>
+        <CRow className="p-5">
+          {listing && listing.map((car: Car, index: number) => {        
+            return (
+              <CarCard
+                key={index}
+                id={index}
+                name={car.vehicleName}
+                price={car.price}
+                image={getImageUrl(car.image)}
+                description={car.description}
+                color={car.vehicleColor ? car.vehicleColor : "#000000"}
+              />
+            )
+          })} 
+        </CRow>
+    </section>
   );
 }

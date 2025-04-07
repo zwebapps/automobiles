@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 interface Contact {
     image: string;
@@ -63,9 +62,9 @@ export default function ContactUs({type = "contact"}: {type: string}) {
                 </div> */}
                 <div className="col-lg-12 col-md-6 col-sm-12">                        
                     <div className="container">
-                        {contact && 
-                            <FroalaEditorView model={JSON.parse(contact.editor)} />
-                        }
+                        {contact &&
+                            <div dangerouslySetInnerHTML={{ __html: JSON.parse(contact.editor)}}  />
+                        } 
                     </div>
                 </div>
             </div> 

@@ -1,7 +1,7 @@
 export  const getImage = (data: string) => {
     if(data) {
         const postData = JSON.parse(data);
-        return  `/${postData.image}`;
+        return postData.image? `/${postData.image}` : '/bashboard.png';
     } else {
         return ""
     }

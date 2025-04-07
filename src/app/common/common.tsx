@@ -80,5 +80,6 @@ export interface FormField {
     name: string;
     type: string;
     id: string;
+    defaultValue?: string;
     placeholder: string;
 }

@@ -13,11 +13,11 @@ export default function Nav() {
                     <a className="nav-link js-scroll-trigger" href="#about">About</a>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link js-scroll-trigger" href="#services">Services</a>
+                    <a className="nav-link js-scroll-trigger" href="#cars">Available Cars</a>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
-                    </li>
+                    <a className="nav-link js-scroll-trigger" href="#services">Services</a>
+                    </li>                                  
                     <li className="nav-item">
                     <a className="nav-link js-scroll-trigger" href="#contact">Contact</a>
                     </li>

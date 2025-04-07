@@ -1,4 +1,4 @@
-"use client";
+'use client';
 // import React, { useEffect } from "react";
 import {
     CButton,
@@ -22,8 +22,7 @@ export default function LoginAdmin() {
         userName: "",        
         password: ""
     });
-  useEffect(() => {
-   
+  useEffect(() => {   
       document.body.style.background = `url(/uploads/backgound-login.jpg) no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
       document.body.style.backgroundBlendMode = "darken";
@@ -60,15 +59,17 @@ export default function LoginAdmin() {
         const data = await res.json();      
         if(res.status === 200){
           localStorage.setItem('token', data);
+          toast.success('User logged in successfully');
           router.push('/admin');
-          return toast.success('User logged in successfully');
+          router.refresh();
+          return;
         }
         toast.error('Provide correct credentials');
+        return;
     });
   };
 
-  return (
-    
+  return (    
        <CContainer className="text-center" >
           <CRow className="justify-content-center p-5">
             <Col col={12} lg={12} md={12} sm={12}>

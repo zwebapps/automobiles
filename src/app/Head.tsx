@@ -42,6 +42,12 @@ export default function  Head() {
         crossOrigin="anonymous"
         strategy="lazyOnload"
       />
+          <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossOrigin="anonymous"
+      referrerPolicy="no-referrer"
+    />
     </head>
   );
 };

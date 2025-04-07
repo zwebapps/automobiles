@@ -4,44 +4,36 @@ import {
   CButton,
   CCol,
   CContainer,
-  CNavItem,
   CRow,
-  CSidebar,
-  CSidebarBrand,
-  CSidebarHeader,
-  CSidebarNav,
+
 } from "@coreui/react";
 
 import Footer from "../Footer";
 import {
-  cilSpeedometer,
-  cilCloudDownload,
-  cilLayers,
   cilHamburgerMenu,
-  cilAccountLogout,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import MainHeader from "../MainHeader";
 import AboutUs from "../AboutUs";
 import ServicesSection from "../ServicesSection";
-import Portfolio from "../components/Portfolio";
-import CarCard from "../components/CarCard";
-import { Car, Cars } from "../common/common";
 import DynamicForm from "../components/DynamicForm";
 import AdminHeader from "../components/AdminHeader";
 import ContactUs from "../components/ContactUs";
 import DisplayAllPosts from "../components/DisplayAllPosts";
 import { useRouter } from "next/navigation";
+import AdminSidebar from "../components/AdminSidebar";
+import FooterForm from "../components/FooterForm";
 
 
-type FormField = {
+export type FormField = {
   label: string;
   name: string;
   type: string;
+  defaultValue?: string;
   id: string;
   placeholder: string;
 };
-type FormFields = {
+export type FormFields = {
   [key: string]: FormField[];
 };
 const formFields: FormFields = {
@@ -51,12 +43,14 @@ const formFields: FormFields = {
       name: "header",
       type: "text",
       id: "header",
+      defaultValue: "Automotive’s",
       placeholder: "Header",
     },
     {
       name: "headerImage",
       label: "Header background",
       id: "headerImage",
+      defaultValue: "",
       type: "file",
       placeholder: "Enter header Image",
     }
@@ -67,6 +61,7 @@ const formFields: FormFields = {
       name: "about",
       type: "text",
       id: "about",
+      defaultValue: "",
       placeholder: "About",
     },
     {
@@ -74,6 +69,7 @@ const formFields: FormFields = {
       name: "description",
       type: "textarea",
       id: "description",
+      defaultValue: "",
       placeholder: "About Description",
     }
   ],
@@ -83,6 +79,7 @@ const formFields: FormFields = {
       name: "services",
       type: "text",
       id: "services",
+      defaultValue: "",
       placeholder: "Services",
     },
     {
@@ -90,6 +87,7 @@ const formFields: FormFields = {
       label: "Service Logo",
       id: "serviceLogo",
       type: "file",
+      defaultValue: "",
       placeholder: "Enter service logo image",
     },
     {
@@ -97,6 +95,7 @@ const formFields: FormFields = {
       name: "description",
       type: "textarea",
       id: "description",
+      defaultValue: "",
       placeholder: "Service Description",
     }
   ],
@@ -106,6 +105,7 @@ const formFields: FormFields = {
       name: "portfolio",
       type: "text",
       id: "portfolio",
+      defaultValue: "",
       placeholder: "Portfolio",
     },
   ],
@@ -115,6 +115,7 @@ const formFields: FormFields = {
       name: "contact",
       type: "text",
       id: "contact",
+      defaultValue: "",
       placeholder: "Contact",
     },
   ],
@@ -124,6 +125,7 @@ const formFields: FormFields = {
       name: "vehicleName",
       type: "text",
       id: "vehicleName",
+      defaultValue: "",
       placeholder: "Vehicle Name / Model",
     },
     {
@@ -131,6 +133,7 @@ const formFields: FormFields = {
       name: "description",
       type: "textarea",
       id: "description",
+      defaultValue: "",
       placeholder: "Vehicle details",
     },
     {
@@ -138,6 +141,7 @@ const formFields: FormFields = {
       name: "price",
       type: "number",
       id: "price",
+      defaultValue: "",
       placeholder: "Vehicle Price",
     },
     {
@@ -145,6 +149,7 @@ const formFields: FormFields = {
       name: "vehicleColor",
       type: "color",
       id: "vehicleColor",
+      defaultValue: "",
       placeholder: "Vehicle Color",
     },
     {
@@ -152,22 +157,22 @@ const formFields: FormFields = {
       name: "vehicleImage",
       type: "file",
       id: "vehicleImage",
+      defaultValue: "",
       placeholder: "Vehicle Image",
     },
   ],
 };
 
-type FormType =
+export type FormType =
   | "header"
   | "about"
   | "services"
-  | "portfolio"
   | "contact"
-  | "listing" | "Posts";
+  | "listing" | "Posts" | "footer";
 
 export default function Admin() {
   const router = useRouter();
-  const [formType, setFormType] = useState<FormType>("header");
+  const [formType, setFormType] = useState<FormType>('header');
   const [fields, setFields] = useState<FormField[]>([]);
   const [sidebarShow, setSidebarShow] = useState(true);
   const [mainContainer, setMainContainer] = useState({});
@@ -178,23 +183,26 @@ export default function Admin() {
     portfolio: false,
     contact: false,
     listing: false,
-    Posts: false
+    Posts: false,
+    footer: false
   });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/login");
-      }  
-    }   
-    setFields(formFields[formType]);
+        router.replace("/login")
+      } else {        
+          setFields(formFields[formType]);
+        }
+      }    
   }, [formType, router]);
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    router.replace("/login")
   }
   const handleTogglePage = (param: FormType) => {
+    debugger
     setFormType(param);
     setTogglePage((prevState) => {
       return {
@@ -202,13 +210,15 @@ export default function Admin() {
         header: false,
         about: false,
         services: false,
-        portfolio: false,
         contact: false,
         listing: false,
          Posts: false,
+         footer: false,
         [param]: true,
       };
     });
+    console.log("togglePage", togglePage);
+    console.log("param", param);
   };
 
   const toggleSidebar = () => {
@@ -223,7 +233,8 @@ export default function Admin() {
   };
   
   return (
-    <CContainer fluid>
+    formType &&
+    <CContainer fluid >
       <CRow>
         <CCol className="col-12 p-0 m-0 d-lg-none d-sm-block admin-toggle-btn">
           <CButton
@@ -260,134 +271,11 @@ export default function Admin() {
               position: `${sidebarShow ? "absolute" : "static"}`,
             }}
           >
-            <CSidebar
-              className="border-end border-start dark"
-              colorScheme="dark"
-            >
-              <CSidebarHeader className="border-bottom p-5 text-center">
-                <CSidebarBrand>Majestic Journey</CSidebarBrand>                         
-              </CSidebarHeader>
-              <CSidebarNav className="text-center border-bottom">
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.header ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("header")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1"
-                    icon={cilSpeedometer}
-                    height={24}
-                    width={24}
-                  />{" "}
-                  Header
-                </CNavItem>
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.about ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("about")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1"
-                    icon={cilSpeedometer}
-                    height={24}
-                    width={24}
-                  />{" "}
-                  About
-                </CNavItem>
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.services ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("services")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1"
-                    icon={cilCloudDownload}
-                    height={24}
-                    width={24}
-                  />
-                  Services
-                </CNavItem>
-                {/* <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.portfolio ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("portfolio")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1"
-                    icon={cilCloudDownload}
-                    height={24}
-                    width={24}
-                  />
-                  Portfolio
-                </CNavItem> */}
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.listing ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("listing")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1"
-                    icon={cilCloudDownload}
-                    height={24}
-                    width={24}
-                  />
-                  Cars Listing
-                </CNavItem>
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.contact ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("contact")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1 list-unstyled"
-                    icon={cilLayers}
-                    height={24}
-                    width={24}
-                  />{" "}
-                  Contact Us
-                </CNavItem>
-                <CNavItem
-                  href="#"
-                  className={`list-unstyled p-3 ${
-                    togglePage.Posts ? "nav-item-active" : ""
-                  }`}
-                  onClick={() => handleTogglePage("Posts")}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1 list-unstyled"
-                    icon={cilLayers}
-                    height={24}
-                    width={24}
-                  />{" "}
-                  All Posts
-                </CNavItem>
-                <CNavItem
-                  href="#"
-                  className="list-unstyled p-3"
-                  onClick={() => handleLogout()}
-                >
-                  <CIcon
-                    customClassName="nav-icon pr-1 list-unstyled"
-                    icon={cilAccountLogout}
-                    height={24}
-                    width={24}
-                  />{" "}
-                  Logout
-                </CNavItem>
-              </CSidebarNav>
-            </CSidebar>
+            <AdminSidebar
+              handleTogglePage={(e:FormType) => handleTogglePage(e)}
+              handleLogout={handleLogout}
+              togglePage={togglePage}              
+            />
           </CContainer>
         </CCol>
 
@@ -400,33 +288,17 @@ export default function Admin() {
               <AdminHeader type={formType} />
             </CCol>
             <CCol className="col-8">              
-              <DynamicForm key={`${formType}-form`} type={formType} formFields={fields} />
+            {!togglePage.footer && <DynamicForm key={`${formType}-form`} type={formType} formFields={fields} />}
+              
             </CCol>
           </CRow>
           <hr />
 
           {togglePage.header && <MainHeader type="header"></MainHeader>}
           {togglePage.about && <AboutUs type="about" />}
-          {togglePage.services && <ServicesSection type="services" />}
-          {togglePage.portfolio && <Portfolio type="portfolio" />}
-          <CRow className="justify-content-center mt-5">
-            {togglePage.listing
-              ? Cars.map((car: Car) => {
-                  return (
-                    <CarCard
-                      key={car.id}
-                      id={car.id}
-                      name={car.name}
-                      price={car.price}
-                      image={car.image}
-                      description={car.description}
-                      color={car.color}
-                    />
-                  );
-                })
-              : null}
-          </CRow>
+          {togglePage.services && <ServicesSection type="services" />}        
           {togglePage.contact && <ContactUs type="contact"></ContactUs>}
+          {togglePage.footer && <FooterForm type="footer"/>}
           {togglePage.Posts && <DisplayAllPosts/>}
           <CRow className="justify-content-center mt-5">
             <Footer></Footer>
