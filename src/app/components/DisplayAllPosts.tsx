@@ -37,7 +37,9 @@ export default function DisplayAllPosts() {
             }).then(async (res) => {
             setLoading(false);
             const jsonData = await res.json(); 
-            setPosts(jsonData);           
+            // Filter out posts with type "listing" (cars)
+            const filteredPosts = jsonData.filter((post: PostType) => post.name !== 'listing');
+            setPosts(filteredPosts);           
         });
     }  
     const deletePost = async (id: string) => {
@@ -54,6 +56,12 @@ export default function DisplayAllPosts() {
             getPosts();                   
         });
     }
+
+    const getImageUrl = (imageName: string) => {
+      if (!imageName) return "/no-image.png";
+      return `/uploads/${imageName}`;
+    };
+
   return (
     <div className="container">
       <div className="row p-4">
@@ -73,24 +81,29 @@ export default function DisplayAllPosts() {
                  // Try to parse post.data as JSON if possible
                  let desc = '';
                  let img = '';
+                 let actualName = '';
                  try {
                    const parsed = typeof post.data === 'string' ? JSON.parse(post.data) : post.data;
                    desc = parsed?.description?.summary || parsed?.description || '';
-                   img = parsed?.image || parsed?.mainImage || '';
+                   // Extract image from various possible fields
+                   img = parsed?.image || parsed?.mainImage || parsed?.headerImage || parsed?.serviceLogo || '';
+                   // Extract actual name from the data
+                   actualName = parsed?.name || parsed?.header || parsed?.services || parsed?.portfolio || parsed?.contact || '';
                  } catch {
                    desc = post.data as string;
                    img = '';
+                   actualName = '';
                  }
                  return (
                    <CTableRow key={index}>
                      <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                     <CTableDataCell>{post.name}</CTableDataCell>
+                     <CTableDataCell>{actualName || post.name}</CTableDataCell>
                      <CTableDataCell>{desc}</CTableDataCell>
                      <CTableDataCell>
                        <Image
                            className="img-fluid"
-                           src={img || "/no-image.png"}
-                           alt="logo"
+                           src={getImageUrl(img)}
+                           alt="Post Image"
                            width={120}
                            height={80}
                            unoptimized

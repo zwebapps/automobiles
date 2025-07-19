@@ -65,8 +65,8 @@ export class PostController {
       let name = null;
       let imageType = null;
       const body = Object.fromEntries(formData);
-      if(body.image) {
-        const file = (body.image as File) || null;
+      if(body.headerImage && body.headerImage instanceof File) {
+        const file = body.headerImage;
         const { success, imageName, type } = await uploadFile(file);
         name = imageName;
         imageType = type;
