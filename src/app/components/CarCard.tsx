@@ -14,6 +14,7 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
             alt="logo"
             width={460}
             height={360}
+            unoptimized
             priority
             />
         <CCardBody>

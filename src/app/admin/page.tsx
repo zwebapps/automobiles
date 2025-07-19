@@ -23,6 +23,7 @@ import DisplayAllPosts from "../components/DisplayAllPosts";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "../components/AdminSidebar";
 import FooterForm from "../components/FooterForm";
+import CarListingsComponent from "../components/CarListingsComponent";
 
 
 export type FormField = {
@@ -232,7 +233,10 @@ export type FormType =
   | "about"
   | "services"
   | "contact"
-  | "listing" | "Posts" | "footer";
+  | "listing" 
+  | "Posts" 
+  | "footer"
+  | "car-listings";
 
 export default function Admin() {
   const router = useRouter();
@@ -248,7 +252,8 @@ export default function Admin() {
     contact: false,
     listing: false,
     Posts: false,
-    footer: false
+    footer: false,
+    "car-listings": false
   });
 
   useEffect(() => {
@@ -278,6 +283,7 @@ export default function Admin() {
         listing: false,
          Posts: false,
          footer: false,
+         "car-listings": false,
         [param]: true,
       };
     });
@@ -365,6 +371,7 @@ export default function Admin() {
           {togglePage.contact && <ContactUs type="contact"></ContactUs>}
           {togglePage.footer && <FooterForm type="footer"/>}
           {togglePage.Posts && <DisplayAllPosts/>}
+          {togglePage["car-listings"] && <CarListingsComponent />}
           <CRow className="justify-content-center mt-5">
             <Footer></Footer>
           </CRow>

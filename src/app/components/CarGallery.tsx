@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from "react";
 import CarCard from "./CarCard";
+import Image from "next/image";
 
 interface Car {
   _id: string;
@@ -74,11 +75,14 @@ const CarGallery = () => {
               <strong>Gallery:</strong>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {car.galleryImages.map((img: string, idx: number) => (
-                  <img
+                  <Image
                     key={idx}
                     src={img || "/no-image.png"}
                     alt="Gallery"
-                    style={{ width: 80, height: 60, objectFit: "cover", borderRadius: 4 }}
+                    width={80}
+                    height={60}
+                    style={{ objectFit: "cover", borderRadius: 4 }}
+                    unoptimized
                   />
                 ))}
               </div>

@@ -3,25 +3,20 @@ import dbConnect from "../connection/connectMongo";
 import { SocialType } from "../types/utiles";
 
 class SocialService {
-  constructor() {
-    this.connect();
-  }
-
-  async connect() {
-    await dbConnect();
-  }
-
   getSocials = async () => {
+    await dbConnect();
     const posts = await Social.findOne();
     return posts;
   };
 
   getSocial = async (id: string) => {
+    await dbConnect();
     const post = await Social.findOne({ _id: id });
     return post;
   };
 
   createSocial = async (postData: SocialType) => {
+    await dbConnect();
     console.log("createPost", postData);
     const { name } = postData;   
     const result = await Social.findOneAndUpdate(

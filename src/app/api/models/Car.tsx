@@ -11,4 +11,7 @@ const CarSchema = new mongoose.Schema({
   galleryImages: [{ type: String }],
 }, { timestamps: true });
 
-export default mongoose.models.Car || mongoose.model('Car', CarSchema); 
+// Ensure connection before using the model
+const Car = mongoose.models.Car || mongoose.model('Car', CarSchema);
+
+export default Car; 

@@ -5,8 +5,17 @@ import fs from 'fs';
 import path from 'path';
 
 export async function GET() {
-  const cars = await getCars();
-  return NextResponse.json(cars);
+  console.log("=== Car API GET called ===");
+  try {
+    console.log("Calling getCars()...");
+    const cars = await getCars();
+    console.log("Cars returned:", cars);
+    console.log("Number of cars:", cars?.length || 0);
+    return NextResponse.json(cars);
+  } catch (error) {
+    console.error("Error in car GET:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {

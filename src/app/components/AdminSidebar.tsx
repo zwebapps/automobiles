@@ -28,6 +28,7 @@ export default function AdminSidebar({
     contact: boolean;
     Posts: boolean;
     footer: boolean;
+    "car-listings": boolean;
   };
   handleTogglePage: (param: FormType) => void;
   handleLogout: () => void;
@@ -96,7 +97,22 @@ export default function AdminSidebar({
             height={24}
             width={24}
           />
-          Cars Listing
+          Add Cars
+        </CNavItem>
+        <CNavItem
+          href="#"
+          className={`list-unstyled p-3 ${
+            togglePage["car-listings"] ? "nav-item-active" : ""
+          }`}
+          onClick={() => handleTogglePage("car-listings")}
+        >
+          <CIcon
+            customClassName="nav-icon pr-1"
+            icon={cilLayers}
+            height={24}
+            width={24}
+          />
+          Car Listings
         </CNavItem>
         <CNavItem
           href="#"

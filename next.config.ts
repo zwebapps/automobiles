@@ -12,9 +12,12 @@ const nextConfig: NextConfig = {
         TINY_MICE_API_KEY: process.env.TINY_MICE_API_KEY
       },
    images: {
-     disableStaticImages: true,
-     path: '/uploads',
-     loader: 'custom',
+     remotePatterns: [
+       {
+         protocol: 'https',
+         hostname: '**',
+       },
+     ],
    }
 };
 

@@ -38,7 +38,7 @@ export default function ServicesSection({type = "services"}: {type: string}) {
                                     alt="logo"
                                     width={460}
                                     height={360}
-                                    loader={() => '/api/uploads'+ getImageUrl(service.image)}
+                                    unoptimized
                                     priority
                                     />
                                 <h3 className="mb-3">{service.services && service.services.substring(0, 15)}</h3>

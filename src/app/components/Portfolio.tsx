@@ -18,7 +18,7 @@ export default function Portfolio({type = "portfolio"}: {type: string}) {
                                       alt="logo"
                                       width={180}
                                       height={38}
-                                      loader={() => '/api/uploads/portfolio/p-1.jpeg'}
+                                      unoptimized
                                       priority
                                     /> 
                                 </div>
@@ -44,7 +44,7 @@ export default function Portfolio({type = "portfolio"}: {type: string}) {
                                       alt="logo"
                                       width={180}
                                       height={38}
-                                      loader={() => '/api/uploads/portfolio/p-2.jpeg'}
+                                      unoptimized
                                       priority
                                     /> 
                                 </div>
@@ -70,7 +70,7 @@ export default function Portfolio({type = "portfolio"}: {type: string}) {
                                       alt="logo"
                                       width={180}
                                       height={38}
-                                      loader={() => '/portfolio/p-3.jpeg'}
+                                      unoptimized
                                       priority
                                     />
                                 </div>

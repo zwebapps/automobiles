@@ -12,7 +12,6 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getImage } from "./commonUtils";
 
 type PostType = {
     _id: React.ReactNode | number;
@@ -63,31 +62,41 @@ export default function DisplayAllPosts() {
             <CTableRow>
               <CTableHeaderCell scope="col">#</CTableHeaderCell>
               <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Description</CTableHeaderCell>
               <CTableHeaderCell scope="col">Image</CTableHeaderCell>
-              {/* <CTableHeaderCell scope="col">Data</CTableHeaderCell> */}
               <CTableHeaderCell scope="col">Action</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
           {posts.length > 0 && (
               (posts as PostType[]).map((post: PostType, index: number) => { 
+                 // Try to parse post.data as JSON if possible
+                 let desc = '';
+                 let img = '';
+                 try {
+                   const parsed = typeof post.data === 'string' ? JSON.parse(post.data) : post.data;
+                   desc = parsed?.description?.summary || parsed?.description || '';
+                   img = parsed?.image || parsed?.mainImage || '';
+                 } catch {
+                   desc = post.data as string;
+                   img = '';
+                 }
                  return (
                    <CTableRow key={index}>
                      <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
                      <CTableDataCell>{post.name}</CTableDataCell>
+                     <CTableDataCell>{desc}</CTableDataCell>
                      <CTableDataCell>
                        <Image
                            className="img-fluid"
-                           src={getImage(post.data as string)}
+                           src={img || "/no-image.png"}
                            alt="logo"
-                           width={360}
-                           height={360}
-                           loader={() => '/api/uploads'+ getImage(post.data as string)}
+                           width={120}
+                           height={80}
+                           unoptimized
                            priority
                            />
-                       
                        </CTableDataCell>
-                     {/* <CTableDataCell>{post.data}</CTableDataCell> */}
                      <CTableDataCell onClick={() => {deletePost(post._id as string)}}>
                        <CIcon
                          customClassName="nav-icon pr-1"

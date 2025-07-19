@@ -3,25 +3,20 @@ import dbConnect from "../connection/connectMongo";
 import { PostType } from "../types/utiles";
 
 class PostService {
-  constructor() {
-    this.connect();
-  }
-
-  async connect() {
-    await dbConnect();
-  }
-
   getPosts = async () => {
+    await dbConnect();
     const posts = await Post.find();
     return posts;
   };
 
   getPost = async (id: string) => {
+    await dbConnect();
     const post = await Post.findOne({ _id: id });
     return post;
   };
 
   createPost = async (postData: PostType) => {
+    await dbConnect();
     const { name } = postData;
     const notSinglePost = ["listing", "services"];
     let result = null;
@@ -38,19 +33,24 @@ class PostService {
   };
 
   updatePost = async (id: string, postData: PostType) => {
+    await dbConnect();
     const result = await Post.updateOne({ _id: id }, { $set: postData });
     return result;
   };
 
   deletePost = async (id: string) => {
+    await dbConnect();
     await Post.deleteOne({ _id: id });
   };
 
   getPostByName = async (name: string) => {
+    await dbConnect();
     const post = await Post.find({ name });
     return post;
   };
+  
   getPostById = async (id: string) => {
+    await dbConnect();
     const post = await Post.findOne({ _id: id });
     return post;
   };
