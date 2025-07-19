@@ -20,6 +20,7 @@ export default function DynamicForm({
   useEffect(() => {
   }, [loading]);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    debugger
     setLoading(true);
     e.preventDefault();
     if(Object.values(formValues).length === 0 || Object.values(formValues).some((val) => !val)) {
@@ -32,17 +33,20 @@ export default function DynamicForm({
     postData.append('type',type);
     formFields.forEach((field) => {
       if (field.type === "file" && field) {
-        postData.append('image',formValues[field.name]);
+        postData.append(`${field.name}`,formValues[field.name]);
       } else {
         postData.append(`${field.name}`,formValues[field.name]);
       }
     });
+    const body = Object.fromEntries(postData);
+    console.log('body',body)
     if(type === 'contact'){
       postData.append('editor',formValues['editor']);
     }
     const token = localStorage.getItem("token");
+    const apiUrl = type === 'listing'? 'car' : 'post';    
     // create a new post
-    await fetch("/api/post", {
+    await fetch(`/api/${apiUrl}`, {
       method: "POST",
       body: postData,
       headers: {
@@ -56,7 +60,7 @@ export default function DynamicForm({
               toast.success(`${type} created successfully`);
               if(window) {               
               setTimeout(() => {
-                window.location.reload();
+                // window.location.reload();
               }, 1000);
               }
           } else {
@@ -78,6 +82,7 @@ export default function DynamicForm({
         name = e.target.name
         value = e.target.value;
       }
+      console.log([name],":::",value)
     setFormValues({ ...formValues, [name]: value });
   };
 

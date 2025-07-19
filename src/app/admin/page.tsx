@@ -121,20 +121,44 @@ const formFields: FormFields = {
   ],
   listing: [
     {
-      label: "Vehicle Name / Model",
-      name: "vehicleName",
+      label: "Car Name",
+      name: "name",
       type: "text",
-      id: "vehicleName",
+      id: "name",
       defaultValue: "",
-      placeholder: "Vehicle Name / Model",
+      placeholder: "Car Name (e.g. Tesla Model S)",
     },
     {
-      label: "Description",
-      name: "description",
-      type: "textarea",
-      id: "description",
+      label: "Make",
+      name: "make",
+      type: "text",
+      id: "make",
       defaultValue: "",
-      placeholder: "Vehicle details",
+      placeholder: "Brand/Make (e.g. Tesla)",
+    },
+    {
+      label: "Model",
+      name: "model",
+      type: "text",
+      id: "model",
+      defaultValue: "",
+      placeholder: "Model (e.g. S, M3, Camry)",
+    },
+    {
+      label: "Year",
+      name: "year",
+      type: "number",
+      id: "year",
+      defaultValue: "",
+      placeholder: "Year (e.g. 2022)",
+    },
+    {
+      label: "Mileage",
+      name: "mileage",
+      type: "number",
+      id: "mileage",
+      defaultValue: "",
+      placeholder: "Mileage (km)",
     },
     {
       label: "Price",
@@ -149,16 +173,56 @@ const formFields: FormFields = {
       name: "vehicleColor",
       type: "color",
       id: "vehicleColor",
-      defaultValue: "",
+      defaultValue: "#000000",
       placeholder: "Vehicle Color",
     },
     {
-      label: "Vehicle Image",
-      name: "vehicleImage",
+      label: "Description (JSON)",
+      name: "description",
+      type: "textarea",
+      id: "description",
+      defaultValue: "{\n  \"summary\": \"\",\n  \"features\": []\n}",
+      placeholder: "Description as JSON (e.g. {\"summary\":\"...\",\"features\":[\"...\"]})",
+    },
+    {
+      label: "Main Image",
+      name: "mainImage",
       type: "file",
-      id: "vehicleImage",
+      id: "mainImage",
       defaultValue: "",
-      placeholder: "Vehicle Image",
+      placeholder: "Main Image",
+    },
+    {
+      label: "Gallery Image 1",
+      name: "galleryImage1",
+      type: "file",
+      id: "galleryImage1",
+      defaultValue: "",
+      placeholder: "Gallery Image 1",
+    },
+    {
+      label: "Gallery Image 2",
+      name: "galleryImage2",
+      type: "file",
+      id: "galleryImage2",
+      defaultValue: "",
+      placeholder: "Gallery Image 2",
+    },
+    {
+      label: "Gallery Image 3",
+      name: "galleryImage3",
+      type: "file",
+      id: "galleryImage3",
+      defaultValue: "",
+      placeholder: "Gallery Image 3",
+    },
+    {
+      label: "Gallery Image 4",
+      name: "galleryImage4",
+      type: "file",
+      id: "galleryImage4",
+      defaultValue: "",
+      placeholder: "Gallery Image 4",
     },
   ],
 };
@@ -217,8 +281,9 @@ export default function Admin() {
         [param]: true,
       };
     });
+    debugger
     console.log("togglePage", togglePage);
-    console.log("param", param);
+    console.log("param", param, 'fields', fields);
   };
 
   const toggleSidebar = () => {

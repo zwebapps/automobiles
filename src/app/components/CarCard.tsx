@@ -4,20 +4,16 @@ import { CCard, CCardBody, CCardTitle, CCardText } from '@coreui/react';
 import Image from "next/image";
 import { Col } from 'react-bootstrap';
 
-
-
-const CarCard = ({ id, name, price, image, description, color } : { id: number, name: string, price: string, image: string, description: string, color: string }) => {
-  console.log("CarCard", id, name, price, image, description, color)
+const CarCard = ({ id, name, price, image, description, color } : { id: string, name: string, price: string, image?: string, description?: string, color?: string }) => {
   return (
     <Col lg={3} md={4} className="mb-4 m-0 auto">
         <CCard className="shadow mb-4 h-100" key={id}>
         <Image
             className="img-fluid"
-            src={image}
+            src={image || "/no-image.png"}
             alt="logo"
             width={460}
             height={360}
-            loader={() => '/api/uploads/'+image}
             priority
             />
         <CCardBody>

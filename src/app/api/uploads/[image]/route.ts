@@ -29,8 +29,8 @@ export async function GET(req: NextRequest) {
     ? 'image/png'
     : 'image/jpeg';
   if (!mimeType) return new NextResponse('Invalid image format', { status: 400 });
-  
-  return new NextResponse(fileBuffer, {
+
+  return new NextResponse(new Uint8Array(fileBuffer), {
     status: 200,
     headers: {
       'Content-Type': mimeType,

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import CarCard from "./components/CarCard";
 import { getImageUrl } from "./components/commonUtils";
 import { CRow } from "@coreui/react";
+import CarGallery from "./components/CarGallery";
 
 export interface DBCar {
     id: number;
@@ -47,7 +48,7 @@ export default function ListingComponent({ type = "listing"}: { type: string; })
             return (
               <CarCard
                 key={index}
-                id={index}
+                id={String(index)}
                 name={car.vehicleName}
                 price={car.price}
                 image={getImageUrl(car.image)}
@@ -56,6 +57,8 @@ export default function ListingComponent({ type = "listing"}: { type: string; })
               />
             )
           })} 
+          {/* New Car Gallery Section */}
+          <CarGallery />
         </CRow>
     </section>
   );
