@@ -3,8 +3,11 @@ import React from 'react';
 import { CCard, CCardBody, CCardTitle, CCardText, CButton } from '@coreui/react';
 import Image from "next/image";
 import { Col } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
 const CarCard = ({ id, name, price, image, description, color } : { id: string, name: string, price: string, image?: string, description?: string, color?: string }) => {
+  const router = useRouter();
+
   const formatPrice = (price: string) => {
     const priceNumber = parseFloat(price);
     
@@ -22,9 +25,7 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
   };
 
   const handleDetailsClick = () => {
-    // You can implement navigation to a details page or show a modal
-    console.log(`View details for car: ${name}`);
-    // Example: router.push(`/car/${id}`);
+    router.push(`/car/${encodeURIComponent(name)}`);
   };
 
   // Ensure we have a valid image source
