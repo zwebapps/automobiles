@@ -1,65 +1,77 @@
 "use client";
 import { useState, useEffect } from "react";
 import CarCard from "./components/CarCard";
-import { getImageUrl } from "./components/commonUtils";
 import { CRow } from "@coreui/react";
-import CarGallery from "./components/CarGallery";
+import { CarData } from "./api/controllers/CarController";
 
-export interface DBCar {
-    id: number;
-    name: string;
-    data: string;
-}
+export default function ListingComponent() {
+  const [cars, setCars] = useState<CarData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-interface Car {
-    _id: string;
-    vehicleName: string;
-    price: string;
-    image: string;
-    description: string;
-    vehicleColor: string;
+  useEffect(() => {
+    fetch("/api/car")
+      .then((res) => res.json())
+      .then((data) => {
+        setCars(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching cars:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="cars">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 text-center">
+              <h2 className="section-heading">Available Cars</h2>
+              <div className="line-shape"></div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center p-5">
+          <p>Loading cars...</p>
+        </div>
+      </section>
+    );
   }
 
-export default function ListingComponent({ type = "listing"}: { type: string; }) {
-  const [listing, setListing] = useState<Car[] >();
-  useEffect(() => {
-    fetch(`/api/post/${type}`, {
-      method: "GET",
-    }).then(async (res) => {
-      const post = await res.json();
-      console.log("listing Component", post);
-      const listingPost = post.map((p: DBCar) => JSON.parse(p.data)) as Car[];      
-      setListing(listingPost);
-    });
-  }, [type]);
-  console.log("listing", listing);
   return (
     <section id="cars">
       <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12 text-center">
-                            <h2 className="section-heading">Available Cars</h2>
-                            <div className="line-shape"></div>
-                        </div>
-                    </div>
-                </div>
-        <CRow className="p-5">
-          {listing && listing.map((car: Car, index: number) => {        
-            return (
-              <CarCard
-                key={index}
-                id={String(index)}
-                name={car.vehicleName}
-                price={car.price}
-                image={getImageUrl(car.image)}
-                description={car.description}
-                color={car.vehicleColor ? car.vehicleColor : "#000000"}
-              />
-            )
-          })} 
-          {/* New Car Gallery Section */}
-          <CarGallery />
-        </CRow>
+        <div className="row">
+          <div className="col-lg-12 text-center">
+            <h2 className="section-heading">Available Cars</h2>
+            <div className="line-shape"></div>
+          </div>
+        </div>
+      </div>
+      <CRow className="p-5">
+        {cars.length > 0 ? (
+          cars.map((car, index) => (
+            <CarCard
+              key={car._id || index}
+              id={String(car._id || index)}
+              name={car.name}
+              price={(car.price)?.toString() || "Contact for price"}
+              image={car.mainImage || "/no-image.svg"}
+              description={
+                typeof car.description === "object" && car.description && 'summary' in car.description
+                  ? (car.description as { summary: string }).summary
+                  : String(car.description || '')
+              }
+              color={car.color || "#000000"}
+            />
+          ))
+        ) : (
+          <div className="col-12 text-center">
+            <p>No cars available at the moment.</p>
+          </div>
+        )}
+      </CRow>
     </section>
   );
 }

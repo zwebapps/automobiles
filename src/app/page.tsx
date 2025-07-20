@@ -16,7 +16,7 @@ export default function Home() {
     <MainHeader type="header" />
     <AboutUs type="about" />   
     <CRow>
-    <ListingComponent type="listing" />
+    <ListingComponent />
     </CRow>    
     <br />
     <ServicesSection type="services" />
