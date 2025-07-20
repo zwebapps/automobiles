@@ -14,6 +14,9 @@ export default function CarDetailPage() {
   const [loading, setLoading] = useState(true);
   const [cars, setCars] = useState<CarData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedMainImage, setSelectedMainImage] = useState<string>("");
+  const [showMainImagePopup, setShowMainImagePopup] = useState(false);
+  const [popupImageIndex, setPopupImageIndex] = useState(0);
 
   useEffect(() => {
     if (params.name) {
@@ -22,12 +25,35 @@ export default function CarDetailPage() {
     }
   }, [params.name]);
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!showMainImagePopup) return;
+      
+      switch (event.key) {
+        case 'ArrowLeft':
+          navigatePopupImage('prev');
+          break;
+        case 'ArrowRight':
+          navigatePopupImage('next');
+          break;
+        case 'Escape':
+          closeMainImagePopup();
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showMainImagePopup, popupImageIndex, car]);
+
   const fetchCarDetails = async () => {
     try {
       const response = await fetch(`/api/car/${params.name}`);
       if (response.ok) {
         const carData = await response.json();
         setCar(carData);
+        setSelectedMainImage(carData.mainImage || "");
         setLoading(false);
       } else {
         console.error("Car not found");
@@ -78,6 +104,47 @@ export default function CarDetailPage() {
     if (nextCar && nextCar.name) {
       router.push(`/car/${encodeURIComponent(nextCar.name)}`);
     }
+  };
+
+  const handleGalleryImageClick = (image: string) => {
+    setSelectedMainImage(image);
+  };
+
+  const handleMainImageClick = () => {
+    setShowMainImagePopup(true);
+    setPopupImageIndex(0); // Start with main image
+  };
+
+  const closeMainImagePopup = () => {
+    setShowMainImagePopup(false);
+  };
+
+  const navigatePopupImage = (direction: 'prev' | 'next') => {
+    if (!car) return;
+    
+    const allImages = [car.mainImage, ...(car.galleryImages || [])].filter(Boolean);
+    if (allImages.length === 0) return;
+    
+    let newIndex;
+    if (direction === 'prev') {
+      newIndex = popupImageIndex > 0 ? popupImageIndex - 1 : allImages.length - 1;
+    } else {
+      newIndex = popupImageIndex < allImages.length - 1 ? popupImageIndex + 1 : 0;
+    }
+    
+    setPopupImageIndex(newIndex);
+    setSelectedMainImage(allImages[newIndex] || "");
+  };
+
+  const getCurrentPopupImage = () => {
+    if (!car) return "";
+    const allImages = [car.mainImage, ...(car.galleryImages || [])].filter(Boolean);
+    return allImages[popupImageIndex] || "";
+  };
+
+  const getPopupImageCount = () => {
+    if (!car) return 0;
+    return [car.mainImage, ...(car.galleryImages || [])].filter(Boolean).length;
   };
 
   if (loading) {
@@ -155,36 +222,95 @@ export default function CarDetailPage() {
               <div className="card-body">
                 {/* Main Image */}
                 <div className="mb-4">
-                  <Image
-                    src={car.mainImage || "/no-image.svg"}
-                    alt={car.name}
-                    width={800}
-                    height={400}
-                    className="img-fluid rounded"
-                    unoptimized
-                    style={{ objectFit: "cover", width: "100%", height: "400px" }}
-                  />
+                  <div 
+                    style={{ 
+                      cursor: 'pointer',
+                      position: 'relative'
+                    }}
+                    onClick={handleMainImageClick}
+                  >
+                    <Image
+                      src={selectedMainImage || car.mainImage || "/no-image.svg"}
+                      alt={car.name}
+                      width={800}
+                      height={400}
+                      className="img-fluid rounded"
+                      unoptimized
+                      style={{ objectFit: "cover", width: "100%", height: "400px" }}
+                    />
+                    <div 
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        padding: '5px 10px',
+                        borderRadius: '4px',
+                        fontSize: '12px'
+                      }}
+                    >
+                      Click to enlarge
+                    </div>
+                  </div>
                 </div>
 
                 {/* Gallery */}
                 {car.galleryImages && car.galleryImages.length > 0 && (
                   <div className="mb-4">
                     <h4>Gallery</h4>
-                    <CRow>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                      {/* Main Image Thumbnail */}
+                      <div 
+                        className="position-relative" 
+                        style={{ 
+                          height: '120px', 
+                          width: '120px',
+                          cursor: 'pointer',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          border: selectedMainImage === car.mainImage ? '2px solid #007bff' : '1px solid #dee2e6'
+                        }}
+                        onClick={() => handleGalleryImageClick(car.mainImage || "")}
+                      >
+                        <Image
+                          src={car.mainImage || "/no-image.svg"}
+                          alt={`${car.name} main image`}
+                          width={120}
+                          height={120}
+                          className="img-fluid"
+                          unoptimized
+                          style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                        />
+                      </div>
+                      
+                      {/* Gallery Images */}
                       {car.galleryImages.map((image, index) => (
-                        <CCol key={index} xs={6} sm={4} md={3} className="mb-3">
+                        <div 
+                          key={index}
+                          className="position-relative" 
+                          style={{ 
+                            height: '120px', 
+                            width: '120px',
+                            cursor: 'pointer',
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            border: selectedMainImage === image ? '2px solid #007bff' : '1px solid #dee2e6'
+                          }}
+                          onClick={() => handleGalleryImageClick(image)}
+                        >
                           <Image
                             src={image}
                             alt={`${car.name} gallery ${index + 1}`}
-                            width={200}
-                            height={150}
-                            className="img-fluid rounded"
+                            width={120}
+                            height={120}
+                            className="img-fluid"
                             unoptimized
-                            style={{ objectFit: "cover", width: "100%", height: "150px" }}
+                            style={{ objectFit: "cover", width: "100%", height: "100%" }}
                           />
-                        </CCol>
+                        </div>
                       ))}
-                    </CRow>
+                    </div>
                   </div>
                 )}
 
@@ -279,6 +405,127 @@ export default function CarDetailPage() {
           </CRow>
         )}
       </CContainer>
+
+      {/* Main Image Full Screen Popup with Navigation */}
+      {showMainImagePopup && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999,
+            cursor: 'pointer'
+          }}
+          onClick={closeMainImagePopup}
+        >
+          <div 
+            style={{
+              position: 'relative',
+              maxWidth: '95%',
+              maxHeight: '95%'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={getCurrentPopupImage()}
+              alt={car.name}
+              width={1200}
+              height={800}
+              className="img-fluid rounded"
+              unoptimized
+              style={{ 
+                objectFit: "contain", 
+                maxWidth: "100%", 
+                maxHeight: "100%" 
+              }}
+            />
+            
+            {/* Close Button */}
+            <CButton
+              color="light"
+              size="sm"
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                zIndex: 10000
+              }}
+              onClick={closeMainImagePopup}
+            >
+              ✕
+            </CButton>
+
+            {/* Image Counter */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                color: 'white',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                fontSize: '14px',
+                zIndex: 10000
+              }}
+            >
+              {popupImageIndex + 1} / {getPopupImageCount()}
+            </div>
+
+            {/* Navigation Arrows */}
+            {getPopupImageCount() > 1 && (
+              <>
+                <CButton
+                  color="light"
+                  size="sm"
+                  style={{
+                    position: 'absolute',
+                    left: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10000,
+                    borderRadius: '50%',
+                    width: '50px',
+                    height: '50px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onClick={navigatePopupImage.bind(null, 'prev')}
+                >
+                  ←
+                </CButton>
+                <CButton
+                  color="light"
+                  size="sm"
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10000,
+                    borderRadius: '50%',
+                    width: '50px',
+                    height: '50px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onClick={navigatePopupImage.bind(null, 'next')}
+                >
+                  →
+                </CButton>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
