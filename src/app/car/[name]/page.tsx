@@ -6,6 +6,7 @@ import { CarData } from "@/app/api/controllers/CarController";
 import Nav from "@/app/Nav";
 import Footer from "@/app/Footer";
 import { CButton, CContainer, CRow, CCol } from "@coreui/react";
+import ContactUs from "../../components/ContactUs";
 
 export default function CarDetailPage() {
   const params = useParams();
@@ -17,6 +18,7 @@ export default function CarDetailPage() {
   const [selectedMainImage, setSelectedMainImage] = useState<string>("");
   const [showMainImagePopup, setShowMainImagePopup] = useState(false);
   const [popupImageIndex, setPopupImageIndex] = useState(0);
+  const [showContactPopup, setShowContactPopup] = useState(false);
 
   useEffect(() => {
     if (params.name) {
@@ -145,6 +147,113 @@ export default function CarDetailPage() {
   const getPopupImageCount = () => {
     if (!car) return 0;
     return [car.mainImage, ...(car.galleryImages || [])].filter(Boolean).length;
+  };
+
+  const handleShare = async () => {
+    if (!car) return;
+
+    const shareData = {
+      title: `${car.name} - ${car.model || 'Car'}`,
+      text: `Check out this amazing ${car.name}${car.model ? ` ${car.model}` : ''} for ${formatPrice(car.price)}!`,
+      url: window.location.href
+    };
+
+    // Try native sharing first (mobile devices)
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch {
+        console.log('Native sharing failed, falling back to clipboard');
+      }
+    }
+
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      // Show success toast instead of alert
+      showToast('Link copied to clipboard!', 'success');
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      showToast('Link copied to clipboard!', 'success');
+    }
+  };
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+      color: white;
+      padding: 12px 20px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      font-size: 14px;
+      max-width: 300px;
+      word-wrap: break-word;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    `;
+    toast.textContent = message;
+    
+    // Add to page
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast);
+        }
+      }, 300);
+    }, 3000);
+  };
+
+  const shareToSocialMedia = (platform: string) => {
+    if (!car) return;
+
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`Check out this amazing ${car.name}${car.model ? ` ${car.model}` : ''} for ${formatPrice(car.price)}!`);
+
+    let shareUrl = '';
+
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${text}%20${url}`;
+        break;
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+        break;
+      default:
+        return;
+    }
+
+    window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
   if (loading) {
@@ -383,9 +492,61 @@ export default function CarDetailPage() {
               </div>
               
               <div className="card-footer">
-                <CButton color="primary" size="lg" className="w-100">
+                <CButton 
+                  color="primary" 
+                  size="lg" 
+                  className="w-100 mb-2"
+                  onClick={() => setShowContactPopup(true)}
+                >
                   Contact for Details
                 </CButton>
+                
+                {/* Share Section */}
+                <div className="text-center">
+                  <small className="text-muted mb-2 d-block">Share this car:</small>
+                  <div className="d-flex justify-content-center gap-2 mb-2">
+                    <CButton
+                      color="info"
+                      size="sm"
+                      onClick={() => shareToSocialMedia('facebook')}
+                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                    >
+                      <i className="fab fa-facebook-f"></i>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      size="sm"
+                      onClick={() => shareToSocialMedia('twitter')}
+                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                    >
+                      <i className="fab fa-twitter"></i>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      size="sm"
+                      onClick={() => shareToSocialMedia('whatsapp')}
+                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                    >
+                      <i className="fab fa-whatsapp"></i>
+                    </CButton>
+                    <CButton
+                      color="info"
+                      size="sm"
+                      onClick={() => shareToSocialMedia('telegram')}
+                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                    >
+                      <i className="fab fa-telegram-plane"></i>
+                    </CButton>
+                  </div>
+                  <CButton
+                    color="outline-secondary"
+                    size="sm"
+                    onClick={handleShare}
+                    className="w-100"
+                  >
+                    📋 Copy Link
+                  </CButton>
+                </div>
               </div>
             </div>
           </CCol>
@@ -523,6 +684,85 @@ export default function CarDetailPage() {
                 </CButton>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Contact Popup Modal */}
+      {showContactPopup && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999,
+            padding: '20px'
+          }}
+          onClick={() => setShowContactPopup(false)}
+        >
+          <div 
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+              maxWidth: '800px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div 
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '20px 24px',
+                borderBottom: '1px solid #e5e7eb',
+                backgroundColor: '#f9fafb'
+              }}
+            >
+              <h2 
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 'bold',
+                  color: '#1f2937',
+                  margin: 0
+                }}
+              >
+                Contact Us
+              </h2>
+              <button
+                onClick={() => setShowContactPopup(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: '#6b7280',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  transition: 'color 0.2s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#374151'}
+                onMouseOut={(e) => e.currentTarget.style.color = '#6b7280'}
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Modal Body */}
+            <div style={{ padding: '24px' }}>
+              <ContactUs type="contact" />
+            </div>
           </div>
         </div>
       )}
