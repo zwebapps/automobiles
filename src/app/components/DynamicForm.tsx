@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FormField } from "../common/common";
 import { toast } from "react-toastify";
 import EditorComponent from "../components/EditorComponent";
+import FreeEditorComponent from "../components/FreeEditorComponent";
 
 
 export default function DynamicForm({
@@ -95,7 +96,13 @@ export default function DynamicForm({
         { formFields && formFields.length > 0 &&
           formFields.map((field, index) => (
             <div className="mb-3" key={`${index}-${field.type}`}>
-              {field.type === "textarea" ? (
+              {field.type === "textarea" && field.name === "description" ? (
+                <FreeEditorComponent
+                  key={`${index}-${field.type}`}
+                  handleChange={(content) => setFormValues({ ...formValues, [field.name]: content })}
+                  initialValue={typeof formValues[field.name] === 'string' ? formValues[field.name] as string : field.defaultValue || ""}
+                />
+              ) : field.type === "textarea" ? (
                 <CFormTextarea
                   key={`${index}-${field.type}`}
                   className="mb-3"
@@ -108,7 +115,7 @@ export default function DynamicForm({
                   aria-describedby={`${field.id}-help`}
                 ></CFormTextarea>
               ) : ( field.type === "color" ? (
-                      <CFormInput
+                    <CFormInput
                       key={`${index}-${field.type}`}
                       type={field.type}
                       name={field.name}
@@ -118,7 +125,7 @@ export default function DynamicForm({
                       onChange={(e) => handleChange(e)}
                       text="Must be 8-20 characters long."
                       aria-describedby={`${field.id}-help`}
-                      value={field.defaultValue}
+                      value={typeof formValues[field.name] === 'string' ? formValues[field.name] as string : field.defaultValue || "#000000"}
                     />
                   ) : (
                   <CFormInput

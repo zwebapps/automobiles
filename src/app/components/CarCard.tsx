@@ -33,7 +33,7 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
 
   return (
     <Col lg={3} md={4} className="mb-4 m-0 auto">
-        <CCard className="shadow mb-4 h-100" key={id}>
+        <CCard className="shadow mb-4 h-100 d-flex flex-column" key={id}>
         <Image
             className="img-fluid"
             src={imageSrc}
@@ -43,30 +43,46 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
             unoptimized
             priority
             />
-        <CCardBody>
-            <CCardTitle>{name}</CCardTitle>
-            <CCardText>{description && description.substring(0,150)} </CCardText>
-            <h5 className="text-primary mb-3">Price: {formatPrice(price)}</h5>
+        <CCardBody className="d-flex flex-column flex-grow-1">
+            <CCardTitle className="h5 mb-2">{name}</CCardTitle>
+            <CCardText className="flex-grow-1 mb-2">
+              {description && (() => {
+                // Strip HTML tags for preview
+                const strippedText = description.replace(/<[^>]*>/g, '');
+                // Show exactly 100 characters for uniform look
+                const previewText = strippedText.substring(0, 100);
+                return previewText + (strippedText.length > 100 ? '...' : '');
+              })()}
+            </CCardText>
+            <h6 className="text-primary mb-2">Price: {formatPrice(price)}</h6>
             <div className="d-flex align-items-center mb-3">
-            <span className="me-2">Available Color:</span>
+            <span className="me-2 small">Color:</span>
             <div
                 style={{
-                  width: "20px",
-                  height: "20px",
+                  width: "16px",
+                  height: "16px",
                   backgroundColor: `${color}`,
                   borderRadius: "50%",
                   display: "inline-block",
                 }}
               ></div>         
             </div>
-            <CButton 
-              color="primary" 
-              size="sm" 
-              onClick={handleDetailsClick}
-              className="w-100"
-            >
-              View Details
-            </CButton>
+            <div className="mt-auto">
+              <CButton 
+                color="outline-primary" 
+                size="sm" 
+                onClick={handleDetailsClick}
+                className="w-100"
+                style={{
+                  fontSize: '0.875rem',
+                  padding: '0.375rem 0.75rem',
+                  fontWeight: '500'
+                }}
+              >
+                <i className="fas fa-eye me-2"></i>
+                View Details
+              </CButton>
+            </div>
         </CCardBody>
         </CCard>
     </Col>

@@ -178,12 +178,12 @@ const formFields: FormFields = {
       placeholder: "Vehicle Color",
     },
     {
-      label: "Description (JSON)",
+      label: "Description",
       name: "description",
       type: "textarea",
       id: "description",
-      defaultValue: "{\n  \"summary\": \"\",\n  \"features\": []\n}",
-      placeholder: "Description as JSON (e.g. {\"summary\":\"...\",\"features\":[\"...\"]})",
+      defaultValue: "",
+      placeholder: "Enter car description with rich text formatting",
     },
     {
       label: "Main Image",
@@ -359,7 +359,7 @@ export default function Admin() {
               <AdminHeader type={formType} />
             </CCol>
             <CCol className="col-8">              
-            {!togglePage.footer && <DynamicForm key={`${formType}-form`} type={formType} formFields={fields} />}
+            {!togglePage.footer && !togglePage["car-listings"] && <DynamicForm key={`${formType}-form`} type={formType} formFields={fields} />}
               
             </CCol>
           </CRow>

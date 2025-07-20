@@ -283,9 +283,7 @@ export default function CarDetailPage() {
     );
   }
 
-  const description = typeof car.description === "object" && car.description && 'summary' in car.description
-    ? (car.description as { summary: string }).summary
-    : String(car.description || '');
+  const description = String(car.description || '');
 
   return (
     <div>
@@ -559,7 +557,14 @@ export default function CarDetailPage() {
               <div className="card">
                 <div className="card-body">
                   <h3>Description</h3>
-                  <p className="lead">{description}</p>
+                  <div 
+                    className="lead"
+                    dangerouslySetInnerHTML={{ __html: description }}
+                    style={{
+                      lineHeight: '1.6',
+                      fontSize: '1.1rem'
+                    }}
+                  />
                 </div>
               </div>
             </CCol>

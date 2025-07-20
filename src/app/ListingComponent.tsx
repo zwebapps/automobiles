@@ -58,11 +58,7 @@ export default function ListingComponent() {
               name={car.name}
               price={(car.price)?.toString() || "Contact for price"}
               image={car.mainImage || "/no-image.svg"}
-              description={
-                typeof car.description === "object" && car.description && 'summary' in car.description
-                  ? (car.description as { summary: string }).summary
-                  : String(car.description || '')
-              }
+              description={String(car.description || '')}
               color={car.color || "#000000"}
             />
           ))
