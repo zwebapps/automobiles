@@ -58,7 +58,10 @@ export default function DisplayAllPosts() {
     }
 
     const getImageUrl = (imageName: string) => {
-      if (!imageName) return "/no-image.png";
+      if (!imageName || imageName === 'null' || imageName === 'undefined') {
+        // Simple gray placeholder as data URL
+        return "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMTIwIDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iODAiIGZpbGw9IiNmOGY5ZmEiIHN0cm9rZT0iI2RlZTJlNiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNjAiIHk9IjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM2Yzc1N2QiPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==";
+      }
       return `/uploads/${imageName}`;
     };
 
@@ -100,15 +103,18 @@ export default function DisplayAllPosts() {
                      <CTableDataCell>{actualName || post.name}</CTableDataCell>
                      <CTableDataCell>{desc}</CTableDataCell>
                      <CTableDataCell>
-                       <Image
-                           className="img-fluid"
-                           src={getImageUrl(img)}
-                           alt="Post Image"
-                           width={120}
-                           height={80}
-                           unoptimized
-                           priority
-                           />
+                       <div style={{ width: '120px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                         <Image
+                             className="img-fluid"
+                             src={getImageUrl(img)}
+                             alt="Post Image"
+                             width={120}
+                             height={80}
+                             unoptimized
+                             priority
+                             style={{ objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }}
+                             />
+                       </div>
                        </CTableDataCell>
                      <CTableDataCell onClick={() => {deletePost(post._id as string)}}>
                        <CIcon
