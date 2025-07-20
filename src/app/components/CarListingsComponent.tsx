@@ -61,46 +61,57 @@ export default function CarListingsComponent() {
           <p>No cars found. Add some cars using the &quot;Add Cars&quot; section.</p>
         </div>
       ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Image</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cars.map((car, idx) => (
-              <tr key={idx}>
-                <td>{car.name}</td>
-                <td>
-                  {typeof car.description === "object" && car.description && 'summary' in car.description
-                    ? (car.description as { summary: string }).summary
-                    : String(car.description || '')}
-                </td>
-                <td>
-                  <Image
-                    src={car.mainImage || "/no-image.png"}
-                    alt="Car"
-                    width={120}
-                    height={80}
-                    style={{ objectFit: "cover" }}
-                    unoptimized
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDeleteCar(car._id as string)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {cars.map((car, idx) => (
+                <tr key={idx}>
+                  <td className="fw-bold">{car.name}</td>
+                  <td>
+                    <div className="text-muted small">
+                      {(() => {
+                        const description = String(car.description || '');
+                        // Strip HTML tags for admin display
+                        const strippedText = description.replace(/<[^>]*>/g, '');
+                        // Show first 100 characters with ellipsis
+                        return strippedText.length > 100 
+                          ? strippedText.substring(0, 100) + '...' 
+                          : strippedText;
+                      })()}
+                    </div>
+                  </td>
+                  <td>
+                    <Image
+                      src={car.mainImage || "/no-image.png"}
+                      alt="Car"
+                      width={80}
+                      height={60}
+                      style={{ objectFit: "cover", borderRadius: "4px" }}
+                      unoptimized
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDeleteCar(car._id as string)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      <i className="fas fa-trash me-1"></i>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

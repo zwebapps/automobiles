@@ -324,7 +324,7 @@ export default function CarDetailPage() {
       <CContainer>
         <CRow>
           {/* Main Image and Gallery */}
-          <CCol lg={9} className="mb-4">
+          <CCol lg={9} md={12} className="mb-4">
             <div className="card">
               <div className="card-body">
                 {/* Main Image */}
@@ -422,17 +422,21 @@ export default function CarDetailPage() {
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
                   <CButton
                     color="secondary"
                     onClick={() => navigateToCar('prev')}
                     disabled={cars.length <= 1}
+                    size="sm"
+                    className="w-100 w-sm-auto"
                   >
                     ← Previous
                   </CButton>
                   <CButton
                     color="primary"
                     onClick={() => router.push("/")}
+                    size="sm"
+                    className="w-100 w-sm-auto"
                   >
                     Back to Listings
                   </CButton>
@@ -440,6 +444,8 @@ export default function CarDetailPage() {
                     color="secondary"
                     onClick={() => navigateToCar('next')}
                     disabled={cars.length <= 1}
+                    size="sm"
+                    className="w-100 w-sm-auto"
                   >
                     Next →
                   </CButton>
@@ -449,7 +455,7 @@ export default function CarDetailPage() {
           </CCol>
 
           {/* Car Details */}
-          <CCol lg={3} className="mb-4">
+          <CCol lg={3} md={12} className="mb-4">
             <div className="card h-100 d-flex flex-column">
               <div className="card-body flex-grow-1">
                 <h2 className="card-title" style={{ 

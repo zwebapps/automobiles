@@ -32,7 +32,7 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
   const imageSrc = image && image.trim() !== '' ? image : "/no-image.svg";
 
   return (
-    <Col lg={3} md={4} className="mb-4 m-0 auto">
+    <Col lg={3} md={6} sm={12} className="mb-4">
         <CCard className="shadow mb-4 h-100 d-flex flex-column" key={id}>
         <Image
             className="img-fluid"
@@ -42,10 +42,15 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
             height={360}
             unoptimized
             priority
+            style={{ 
+              height: '200px', 
+              objectFit: 'cover',
+              width: '100%'
+            }}
             />
-        <CCardBody className="d-flex flex-column flex-grow-1">
-            <CCardTitle className="h5 mb-2">{name}</CCardTitle>
-            <CCardText className="flex-grow-1 mb-2">
+        <CCardBody className="d-flex flex-column flex-grow-1 p-3">
+            <CCardTitle className="h5 mb-2 text-truncate">{name}</CCardTitle>
+            <CCardText className="flex-grow-1 mb-2 small">
               {description && (() => {
                 // Strip HTML tags for preview
                 const strippedText = description.replace(/<[^>]*>/g, '');
@@ -80,7 +85,8 @@ const CarCard = ({ id, name, price, image, description, color } : { id: string, 
                 }}
               >
                 <i className="fas fa-eye me-2"></i>
-                View Details
+                <span className="d-none d-sm-inline">View Details</span>
+                <span className="d-sm-none">Details</span>
               </CButton>
             </div>
         </CCardBody>

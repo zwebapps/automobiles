@@ -49,7 +49,7 @@ export default function ListingComponent() {
           </div>
         </div>
       </div>
-      <CRow className="p-5">
+      <CRow className="p-3 p-md-5">
         {cars.length > 0 ? (
           cars.map((car, index) => (
             <CarCard

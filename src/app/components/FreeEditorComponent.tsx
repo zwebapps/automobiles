@@ -49,14 +49,16 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
   };
 
   const toolbarButtonStyle = {
-    padding: '8px 12px',
-    margin: '0 2px',
+    padding: '6px 8px',
+    margin: '0 1px',
     border: '1px solid #ddd',
     backgroundColor: '#fff',
     cursor: 'pointer',
     borderRadius: '4px',
-    fontSize: '14px',
-    transition: 'all 0.2s'
+    fontSize: '12px',
+    transition: 'all 0.2s',
+    whiteSpace: 'nowrap',
+    minWidth: '32px'
   };
 
   const activeButtonStyle = {
@@ -81,7 +83,8 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
           borderTopRightRadius: '4px',
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '4px'
+          gap: '4px',
+          overflowX: 'auto'
         }}
       >
         <button
@@ -204,8 +207,8 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
         ref={editorRef}
         contentEditable
         style={{
-          minHeight: '200px',
-          padding: '12px',
+          minHeight: '150px',
+          padding: '8px',
           border: '1px solid #ddd',
           borderTop: 'none',
           borderBottomLeftRadius: '4px',
@@ -214,7 +217,9 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
           fontFamily: 'Arial, sans-serif',
           fontSize: '14px',
           lineHeight: '1.5',
-          backgroundColor: '#fff'
+          backgroundColor: '#fff',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word'
         }}
         onInput={handleContentChange}
         onKeyUp={handleKeyUp}
