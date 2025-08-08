@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+console.log("env.MONGODB_URI:", process.env.MONGODB_URI);
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://admin:automobile@localhost:27018/automobile?authSource=admin';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://admin:automobile@mongodb:27017/automobile?authSource=admin';
 
 console.log("==============")
 console.log("MongoDB URI:", MONGODB_URI)
@@ -37,7 +38,7 @@ async function dbConnect() {
       family: 4
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts);
+    cached.promise = await mongoose.connect(MONGODB_URI, opts);
   }
 
   try {

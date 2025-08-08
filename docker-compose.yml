@@ -19,11 +19,6 @@ services:
     container_name: nextjs
     build:
       context: .
-      args:
-        MONGO_URI_ARG: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
-        NEXT_PUBLIC_API_URL_ARG: ${NEXT_PUBLIC_API_URL}
-        JWT_SECRETE_STRING_ARG: ${JWT_SECRETE_STRING}
-        TINY_MICE_API_KEY_ARG: ${TINY_MICE_API_KEY}
     ports:
       - "8080:3000"
     depends_on:

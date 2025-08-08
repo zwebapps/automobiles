@@ -3,8 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import Car from '../../../models/Car';
 
-export async function POST(req: NextRequest, { params }: { params: { image: string } }) {
-  const carName = params.image;
+export async function POST(req: NextRequest, { params } : { params: Promise<{ image: string }> }) {
+  const { image } = await params;
+  const carName = image;
   const formData = await req.formData();
   const file = formData.get('file') as File;
   if (!file) {

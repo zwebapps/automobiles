@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { CarData } from "@/app/api/controllers/CarController";
@@ -20,14 +20,7 @@ export default function CarDetailPage() {
   const [popupImageIndex, setPopupImageIndex] = useState(0);
   const [showContactPopup, setShowContactPopup] = useState(false);
 
-  useEffect(() => {
-    if (params.name) {
-      fetchCarDetails();
-      fetchAllCars();
-    }
-  }, [params.name]);
-
-  // Handle keyboard navigation
+   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!showMainImagePopup) return;
@@ -49,7 +42,8 @@ export default function CarDetailPage() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [showMainImagePopup, popupImageIndex, car]);
 
-  const fetchCarDetails = async () => {
+  
+  const fetchCarDetails = useCallback(async () => {
     try {
       const response = await fetch(`/api/car/${params.name}`);
       if (response.ok) {
@@ -65,9 +59,9 @@ export default function CarDetailPage() {
       console.error("Error fetching car details:", error);
       setLoading(false);
     }
-  };
+  }, [params.name]);
 
-  const fetchAllCars = async () => {
+  const fetchAllCars = useCallback(async () => {
     try {
       const response = await fetch("/api/car");
       if (response.ok) {
@@ -79,7 +73,15 @@ export default function CarDetailPage() {
     } catch (error) {
       console.error("Error fetching cars:", error);
     }
-  };
+  }, [params.name]);
+
+  useEffect(() => {
+    if (params.name) {
+      fetchCarDetails();
+      fetchAllCars();
+    }
+  }, [fetchAllCars, fetchCarDetails, params.name]);
+
 
   const formatPrice = (price: number | undefined) => {
     if (!price) return "Contact for price";
@@ -121,7 +123,7 @@ export default function CarDetailPage() {
     setShowMainImagePopup(false);
   };
 
-  const navigatePopupImage = (direction: 'prev' | 'next') => {
+  const navigatePopupImage = useCallback((direction: 'prev' | 'next') => {
     if (!car) return;
     
     const allImages = [car.mainImage, ...(car.galleryImages || [])].filter(Boolean);
@@ -136,7 +138,7 @@ export default function CarDetailPage() {
     
     setPopupImageIndex(newIndex);
     setSelectedMainImage(allImages[newIndex] || "");
-  };
+  }, [ car, popupImageIndex]);
 
   const getCurrentPopupImage = () => {
     if (!car) return "";
