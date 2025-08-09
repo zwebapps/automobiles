@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import CustomHead from "./Head";
+import Head from "./Head";
 import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <CustomHead />
+      <Head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning={true}>
         {children}
         <ToastContainer />
