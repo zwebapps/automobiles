@@ -144,7 +144,6 @@ export default function FooterForm ({ type }: {type: string}) {
     const handleChange = (
       e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-      debugger
     const { name, value } = e.target;        
     setFormValues({ ...formValues, [name]: value });
     };

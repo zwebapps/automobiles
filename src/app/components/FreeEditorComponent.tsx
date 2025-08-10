@@ -20,6 +20,7 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
     document.execCommand(command, false, value.toString());
     editorRef.current?.focus();
     updateToolbarState();
+    // Keep this here to update the parent state after a formatting change.
     handleContentChange();
   };
 
@@ -32,20 +33,25 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
   };
 
   const handleContentChange = () => {
+    // This function is now only called on `onBlur` or a formatting command.
+    // It no longer runs on every keystroke.
     if (editorRef.current) {
       handleChange(editorRef.current.innerHTML);
     }
   };
 
   const handleKeyUp = () => {
+    // We only need to update the toolbar state on key up.
+    // The state update is now handled by `onBlur`.
     updateToolbarState();
-    handleContentChange();
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const text = e.clipboardData.getData('text/plain');
     document.execCommand('insertText', false, text);
+    // After pasting, we should update the parent state.
+    handleContentChange();
   };
 
   const toolbarButtonStyle = {
@@ -221,15 +227,13 @@ const FreeEditorComponent = ({ handleChange, initialValue = "" }: {
           wordWrap: 'break-word',
           overflowWrap: 'break-word'
         }}
-        onInput={handleContentChange}
+        // The `onInput` listener has been removed to prevent constant re-renders
         onKeyUp={handleKeyUp}
         onPaste={handlePaste}
         onBlur={handleContentChange}
       />
-      
-      <div className="form-text">Format your description with the toolbar above. No API keys or payments required!</div>
-    </div>
+      </div>
   );
 };
 
-export default FreeEditorComponent; 
+export default FreeEditorComponent;
