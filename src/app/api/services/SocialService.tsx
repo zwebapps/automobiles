@@ -17,7 +17,6 @@ class SocialService {
 
   createSocial = async (postData: SocialType) => {
     await dbConnect();
-    console.log("createPost", postData);
     const { name } = postData;   
     const result = await Social.findOneAndUpdate(
         { name },

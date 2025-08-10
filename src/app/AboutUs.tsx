@@ -6,8 +6,7 @@ export default function AboutUs({type = "about"}: {type: string}) {
         useEffect(() => {
             fetch(`/api/post/${type}`, {
                 method: "GET",
-            }).then(async(res) => {      
-                debugger        
+            }).then(async(res) => {              
                 const data: [{ name: string, image: string, type: string, data: string}] = await res.json();
                 const post = data.find(dt => dt.name === type);
                 console.log('About us res', data)

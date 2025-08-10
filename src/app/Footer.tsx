@@ -13,16 +13,18 @@ export default function Footer () {
               Authorization: `Bearer ${token}`
                 }
               }).then(async(res) => {
-                const JsonData = await res.json();
-                if(JsonData && JsonData.data) {
-                let socials = JSON.parse(JsonData.data);
-                    if (socials && typeof socials === "object") {
-                        socials = JSON.parse(socials.data)
-                        console.log('socials 1', socials)
-                        setFormValues(socials);               
+                if(res) {
+                    const JsonData = await res.json();
+                    if(JsonData && JsonData.data) {
+                    let socials = JSON.parse(JsonData.data);
+                        if (socials && typeof socials === "object") {
+                            socials = JSON.parse(socials.data)
+                            console.log('socials 1', socials)
+                            setFormValues(socials);               
+                        }
+                    } else {
+                    setFormValues(initialSocial);
                     }
-                } else {
-                setFormValues(initialSocial);
                 }
             }
         );

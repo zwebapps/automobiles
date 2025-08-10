@@ -16,6 +16,7 @@ export class SocialController {
   private socialService: SocialService;
 
   constructor() {
+    
     this.socialService = new SocialService();
   }
 

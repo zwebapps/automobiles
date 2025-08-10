@@ -271,7 +271,6 @@ export default function Admin() {
     router.replace("/login")
   }
   const handleTogglePage = (param: FormType) => {
-    debugger
     setFormType(param);
     setTogglePage((prevState) => {
       return {
@@ -287,7 +286,6 @@ export default function Admin() {
         [param]: true,
       };
     });
-    debugger
     console.log("togglePage", togglePage);
     console.log("param", param, 'fields', fields);
   };

@@ -56,7 +56,7 @@ export default function CarListingsComponent() {
   return (
     <div className="container">
       <h2 className="my-4">Car Listings</h2>
-      {cars.length === 0 ? (
+      {cars && cars.length === 0 ? (
         <div className="text-center p-4">
           <p>No cars found. Add some cars using the &quot;Add Cars&quot; section.</p>
         </div>

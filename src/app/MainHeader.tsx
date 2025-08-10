@@ -24,7 +24,6 @@ export default function MainHeader({type = "header"}: {type: string}) {
               target.tagName === 'A' &&
               target.getAttribute('href')?.startsWith('#')
             ) {
-                debugger
               const href = target.getAttribute('href')!;
               if(href === '#') return
               const el = document.querySelector(href);            
