@@ -84,7 +84,7 @@ const formFields: FormFields = {
       placeholder: "Services",
     },
     {
-      name: "Service Logo",
+      name: "serviceLogo",
       label: "Service Logo",
       id: "serviceLogo",
       type: "file",

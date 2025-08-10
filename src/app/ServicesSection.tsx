@@ -34,7 +34,7 @@ export default function ServicesSection({type = "services"}: {type: string}) {
                                 <div className="service-box mt-5 mx-auto">
                                 <Image
                                     className="img-fluid"
-                                    src={getImageUrl(service.image)}
+                                    src={`/uploads/${getImageUrl(service.image)}`}
                                     alt="logo"
                                     width={460}
                                     height={360}

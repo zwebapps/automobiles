@@ -65,8 +65,28 @@ export class PostController {
       let name = null;
       let imageType = null;
       const body = Object.fromEntries(formData);
+      // console.log("body create post", body);
       if(body.headerImage && body.headerImage instanceof File) {
         const file = body.headerImage;
+        const { success, imageName, type } = await uploadFile(file);
+        name = imageName;
+        imageType = type;
+        if (!success) {
+          return NextResponse.json(
+            { message: "Request body is empty or invalid." },
+            { status: 400 }
+          );
+        }
+  
+        if (!formData) {
+          return NextResponse.json(
+            { message: "Request body is empty or invalid." },
+            { status: 400 }
+          );
+        }
+      }
+      if(body.serviceLogo && body.serviceLogo instanceof File) {
+        const file = body.serviceLogo;
         const { success, imageName, type } = await uploadFile(file);
         name = imageName;
         imageType = type;

@@ -23,9 +23,7 @@ export default function AboutUs({type = "about"}: {type: string}) {
                 <h2>About Us</h2>
                 <div className="line-shape"></div>
                 {about &&  
-                <p>
-                    {about.description}
-                </p> 
+                <p dangerouslySetInnerHTML={{ __html: about.description }} />
                 }                      
             </div>
         </div>
