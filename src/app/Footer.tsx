@@ -1,6 +1,15 @@
 'use client'
 import { useState, useEffect } from "react";
 import { initialSocial, Social } from "./components/FooterForm";
+import { BrandName } from "./components/DynamicBrand";
+
+// Extend Window interface to include openPrivacyCenter
+declare global {
+  interface Window {
+    openPrivacyCenter?: () => void;
+  }
+}
+
 
 export default function Footer () {
     const [formValues, setFormValues] = useState<Social>(initialSocial);
@@ -59,7 +68,9 @@ export default function Footer () {
                     </a>
                 </li>
             </ul>
-            <p className="text-muted small mb-0">Copyright &copy; Majestic Journey 2025</p>
+            <p className="text-muted small mb-0">Copyright &copy; <BrandName /> 2025</p>
+            <a href="#" onClick={(e) => { e.preventDefault(); window?.openPrivacyCenter?.(); }}>Privacy settings</a>
+
         </div>
         </footer>
     )

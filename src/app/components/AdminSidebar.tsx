@@ -14,6 +14,7 @@ import {
   CNavItem,
 } from "@coreui/react";
 import { FormType } from "../admin/page";
+import { BrandName } from "./DynamicBrand";
 
 export default function AdminSidebar({
   togglePage,
@@ -36,7 +37,7 @@ export default function AdminSidebar({
   return (
     <CSidebar className="border-end border-start dark" colorScheme="dark">
       <CSidebarHeader className="border-bottom p-5 text-center">
-        <CSidebarBrand>Majestic Journey</CSidebarBrand>
+        <CSidebarBrand><BrandName /></CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav className="text-center border-bottom">
         <CNavItem

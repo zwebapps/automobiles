@@ -1,15 +1,18 @@
 import Script from "next/script";
-export default function  Head() {
+export default function  Head({title, description, itemListSchema}: {title: string, description: string, itemListSchema: unknown }) {
   return (
     <head>
       <meta charSet="UTF-8" />
       <link rel="icon" href="/favicon.svg" sizes="any"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-      <meta name="description" content="majesticjourney in europe" />
-      <meta name="google" content="nositelinkssearchbox" />
-      <meta name="author" content="majesticjourney" />
-      <title>Auto Mobiles</title>
+      <title>{title}</title>
+      <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      <meta name="description" content={description} />
+
       <link
         rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"

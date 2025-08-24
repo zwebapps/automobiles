@@ -24,7 +24,7 @@ export default function CarListings() {
 
   return (
     <div className="container">
-      <h2 className="my-4">Car Listings</h2>
+      <h2 className="my-4">Avialable Cars</h2>
       <table className="table">
         <thead>
           <tr>

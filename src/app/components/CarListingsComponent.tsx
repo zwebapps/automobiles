@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CarData } from "@/app/api/controllers/CarController";
 import { toast } from "react-toastify";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export default function CarListingsComponent() {
   const [cars, setCars] = useState<CarData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [carToDelete, setCarToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/car")
@@ -21,31 +24,34 @@ export default function CarListingsComponent() {
       });
   }, []);
 
-  const handleDeleteCar = async (carId: string) => {
-    if (window.confirm("Are you sure you want to delete this car?")) {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`/api/car/${carId}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
-          },
-        });
+  const openDeleteDialog = (carId: string) => {
+    setCarToDelete(carId);
+    setShowDeleteDialog(true);
+  };
 
-        if (response.status === 200) {
-          toast.success("Car deleted successfully");
-          // Refresh the cars list
-          fetch("/api/car")
-            .then((res) => res.json())
-            .then((data) => setCars(data));
-        } else {
-          toast.error("Error deleting car");
-        }
-      } catch (error) {
-        console.error("Error deleting car:", error);
+  const handleDeleteCar = async (carId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/car/${carId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success("Car deleted successfully");
+        // Refresh the cars list
+        fetch("/api/car")
+          .then((res) => res.json())
+          .then((data) => setCars(data));
+      } else {
         toast.error("Error deleting car");
       }
+    } catch (error) {
+      console.error("Error deleting car:", error);
+      toast.error("Error deleting car");
     }
   };
 
@@ -100,7 +106,7 @@ export default function CarListingsComponent() {
                   </td>
                   <td>
                     <button
-                      onClick={() => handleDeleteCar(car._id as string)}
+                      onClick={() => openDeleteDialog(car._id as string)}
                       className="btn btn-danger btn-sm"
                     >
                       <i className="fas fa-trash me-1"></i>
@@ -113,6 +119,25 @@ export default function CarListingsComponent() {
           </table>
         </div>
       )}
+      
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        title="Confirm Delete"
+        message="Are you sure you want to delete this car?"
+        confirmText="Delete"
+        confirmColor="danger"
+        visible={showDeleteDialog}
+        showButton={false}
+        onConfirm={() => {
+          handleDeleteCar(carToDelete!);
+          setShowDeleteDialog(false);
+          setCarToDelete(null);
+        }}
+        onCancel={() => {
+          setShowDeleteDialog(false);
+          setCarToDelete(null);
+        }}
+      />
     </div>
   );
 } 
